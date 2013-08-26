@@ -1,0 +1,32 @@
+<html>
+<head>
+
+<link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="jquery-1.7.1.min.js"> </script>
+<script type="text/javascript" src="js/pdjs.js"> </script>
+<script>
+pdjs_settings = {
+  subdomain: "pdt-dave",
+  token: "MnCmrfJpwTfTgcVpCgth",
+  refresh: 60,
+  server: 'pagerduty.dev',
+  protocol: 'http'
+}
+</script>
+
+</head>
+<body>
+
+
+
+<div id="PHV31QN" class="pdjs_schedule">Loading on-call</div>
+
+<div id="PDKO3SJ" class="pdjs_service ">DB</div>
+<div id="PAO02DW" class="pdjs_service_incidents"></div>
+
+</body>
+</html>
+
+coffee –w -c -o js/ coffee/*.coffee
+
+coffee  --watch --join js/pdjs.js --compile coffee/*.coffee
