@@ -43,6 +43,3 @@ class window.PDJStools
         delta = 0
       f = f/diffs[i][0]
     str
-
-window.PDJSt = PDJStools
-PDJStools.logg("test")
