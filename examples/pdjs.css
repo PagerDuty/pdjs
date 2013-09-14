@@ -1,34 +1,24 @@
-body {
-  background-color: #eee;
-}
-.pdjs_triggered {
-  background-color: #ff6633;
-  border-color: #880000;
-}
-.pdjs_acknowledged {
-  background-color: #ffff33;
-  border-color: #888800;
-}
-.pdjs_resolved {
-  background-color: #66ff33;
-  border-color: #008800;
-}
-.pdjs_disabled {
-  color: #333;
-  background-color: #ddd;
-  border-color: #888;
-}
-.pdjs_icon, .pdjs_schedule {
-  border: 1px solid #ddd;
-  padding: 12px;
-  margin: 8px;
-  display: block;
+div#incidents div{
+  float: left;
+  position:relative;
+  padding: 1em 4em; margin: 1em;
   text-align: center;
-  vertical-align: middle;
-  transition: all 0.5s ease; 
+  -webkit-transition: background 1s linear;
+  -moz-transition: background 1s linear;
+  -ms-transition: background 1s linear;
+  -o-transition: background 1s linear;
+  transition: background 1s linear;  
+  opacity: 1;
 }
-.pdjs_icon_big {
-  padding: 16px;
-  margin: 8px;
-  font-size:200%;
+div.triggered {
+  background-color: #fcc;
+  border: 2px solid #800;
+}
+div.acknowledged {
+  background-color: #ffc;
+  border: 2px solid #880;
+}
+div.resolved {
+  background-color: #cfc;
+  border: 2px solid #080;
 }

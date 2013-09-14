@@ -1,5 +1,5 @@
 class window.PDJSobj
-  @version = "0.3.0"
+  @version = "0.3.1"
   
   logg: (str) ->
     if(this.logging)
@@ -8,15 +8,16 @@ class window.PDJSobj
     return this.req_count++
 
   constructor: (params = {}) ->
-    console.log(params)
     this.subdomain = params.subdomain
     this.token = params.token
     this.refresh = params.refresh || 60
+    this.refresh_in_ms = this.refresh * 1000
     this.protocol = params.protocol || "https"
     this.server = params.server || "pagerduty.com"
     this.logging = params.logging
     this.req_count = 1
     @api_version = "v1"
+    this.logg("Initializing PDJSobj")
 
   # If you don't specify a callback, show something useful for debugging
   no_success_function: (json, callerparams) ->
