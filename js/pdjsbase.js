@@ -23,7 +23,7 @@
       this.refresh_in_ms = this.refresh * 1000;
       this.protocol = params.protocol || "https";
       this.server = params.server || "pagerduty.com";
-      this.logging = params.logging;
+      this.logging = params.logging || false;
       this.req_count = 1;
       this.api_version = "v1";
       this.logg("Initializing PDJSobj");

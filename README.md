@@ -3,6 +3,8 @@ pdjs (base)
 
 This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.pagerduty.com/)
 
+Include [jQuery](http://jquery.com/) and [pdjsbase.js](http://eurica.github.io/pdjs/js/pdjsbase.js)
+
     PDJS = new PDJSobj({
       subdomain: "webdemo",
       token: "CkNpsqH9i6yTGus8VDzA",
@@ -35,7 +37,7 @@ There's also a helper method that will handle limits and offsets for lists longe
     PDJS.api_all({
       res: "incidents",
       data: {
-        since: "2013-07-14T09:53:17-07:00",
+        since: "2013-08-01T09:53:17-07:00",
         until: "2013-08-14T09:53:17-07:00",
         status: "resolved",
         fields: "incident_number,status,created_on,service,last_status_change_by,last_status_change_on"
@@ -60,11 +62,10 @@ That's kind of nifty.
 
 There's an examples directory:
 
-  * **examples/incidents.html** polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
-  * **examples/report.html** shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
+  * [examples/incidents.html](http://eurica.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
+  * [examples/report.html](http://eurica.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
 
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
 
 coffee --output js/ --compile --watch --join pdjsbase.js coffeebase/ &
-

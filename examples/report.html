@@ -10,7 +10,7 @@
 
 var DATE_FORMAT = "YYYY-MM-D HH:mm:ss";
 var until = moment();
-var since = moment().subtract('days', 30);
+var since = moment().subtract('days', 14);
 
 $(function(){
   PDJS = new PDJSobj(pdjs_settings)
@@ -23,7 +23,11 @@ $(function(){
       status: "resolved",
       fields: "incident_number,status,created_on,service,last_status_change_by,last_status_change_on"
     },
+    incremental_success: function(data) {
+        $("#status").append(" Loading more.");
+    },
     final_success: function(data) {
+      $("#status").append(" Processing");
       console.log(data.total + " objects!")
       console.log(data)
       str = "incident_number,created_on,last_status_change_on,service_id,service_name,status,last_status_change_by_id,last_status_change_by_name"
@@ -60,7 +64,7 @@ $(function(){
           userst_servicest[s+","+u]=userst_servicest[s+","+u]?userst_servicest[s+","+u]+=tdiff:tdiff
         }
       })
-      
+      $("#status").remove()     
       $("pre#meta").append("Report "+since.format(DATE_FORMAT)+" to "+until.format(DATE_FORMAT)+": "+data[data.res].length+" incidents over "+since.from(until,true)+"\n")
       
       console.log(users)
@@ -86,6 +90,7 @@ $(function(){
 </head>
 
 <body>
+<div id="status">Loading</div>
 <pre id="meta"></pre>
 <hr>
 <pre id="users"></pre>
