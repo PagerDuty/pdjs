@@ -30,6 +30,16 @@ Include [jQuery](http://jquery.com/) and [pdjsbase.js](http://eurica.github.io/p
   * a *function* to use on **success**
   * also optional is an **error** function
 
+The **res** parameter may have an ID in it, here's the call to get the [notes](http://developer.pagerduty.com/documentation/rest/incidents/notes/list) for incident PNCII2E
+
+    PDJS.api({
+      res: "incidents/PNCII2E/notes",
+      success: function (json) {
+        alert(JSON.stringify(json))
+      },
+    })
+
+
 ## The *api_all* helper
 
 There's also a helper method that will handle limits and offsets for lists longer than 100 elements:
@@ -69,3 +79,12 @@ There's an examples directory:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
 
 coffee --output js/ --compile --watch --join pdjsbase.js coffeebase/ &
+
+## More info
+
+For more info contact [dave@euri.ca](mailto:dave@euri.ca)
+
+Coming soon:
+
+  * The ability to trigger incidents on Generic API services.
+  * More examples
