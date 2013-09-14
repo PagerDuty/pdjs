@@ -1,0 +1,98 @@
+<html>
+<head>
+
+<link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="lib/jquery-1.7.1.min.js"> </script>
+<script src="lib/moment.min.js"> </script>
+<script src="config.js"> </script>
+<script type="text/javascript" src="../js/pdjsbase.js"> </script>
+<script>
+
+var DATE_FORMAT = "YYYY-MM-D HH:mm:ss";
+var until = moment();
+var since = moment().subtract('days', 30);
+
+$(function(){
+  PDJS = new PDJSobj(pdjs_settings)
+  console.log(PDJS)
+  PDJS.api_all({
+    res: "incidents",
+    data: {
+      since: since.format(),
+      until: until.format(),
+      status: "resolved",
+      fields: "incident_number,status,created_on,service,last_status_change_by,last_status_change_on"
+    },
+    final_success: function(data) {
+      console.log(data.total + " objects!")
+      console.log(data)
+      str = "incident_number,created_on,last_status_change_on,service_id,service_name,status,last_status_change_by_id,last_status_change_by_name"
+      $("pre#output").append(str+"\n")
+      users = {}
+      services = {}
+      users_services = {}
+      userst = {}
+      servicest = {}
+      userst_servicest = {}
+      jQuery.each( data[data.res], function(index, value){
+        //console.log(value)
+        created_on = moment(value.created_on)
+        last_status_change_on = moment(value.last_status_change_on)
+        str = [value.incident_number, created_on.format(DATE_FORMAT),
+        last_status_change_on.format(DATE_FORMAT),
+        last_status_change_on.from(created_on, true), 
+        value.service.id, value.service.name, value.status, 
+        value.last_status_change_by?value.last_status_change_by.id:"", 
+        value.last_status_change_by?value.last_status_change_by.name:"" ].join()
+        console.log(str)
+        $("pre#output").append(str+"\n")
+        
+        value.last_status_change_by = value.last_status_change_by || {name: "auto-resolved"}
+        if(value.status=="resolved") {
+          s=value.service.name
+          u=value.last_status_change_by.name
+          tdiff = (last_status_change_on - created_on)/1000/60
+          users[u]=users[u]?users[u]+=1:1
+          services[s]=services[s]?services[s]+=1:1
+          users_services[s+","+u]=users_services[s+","+u]?users_services[s+","+u]+=1:1
+          userst[u]=userst[u]?userst[u]+=tdiff:tdiff
+          servicest[s]=servicest[s]?servicest[s]+=tdiff:tdiff
+          userst_servicest[s+","+u]=userst_servicest[s+","+u]?userst_servicest[s+","+u]+=tdiff:tdiff
+        }
+      })
+      
+      $("pre#meta").append("Report "+since.format(DATE_FORMAT)+" to "+until.format(DATE_FORMAT)+": "+data[data.res].length+" incidents over "+since.from(until,true)+"\n")
+      
+      console.log(users)
+      console.log(userst)
+      $("pre#users").append("User,incidents,total_time_m,avg_time_m\n")
+      jQuery.each( users, function(index, value){
+        str = [index,value,userst[index],userst[index]/value].join()
+        $("pre#users").append(str+"\n")
+      })
+
+      console.log(services)
+      console.log(servicest)
+      $("pre#services").append("Service,incidents,total_time_m,avg_time_m\n")
+      jQuery.each( services, function(index, value){
+        str = [index,value,servicest[index],servicest[index]/value].join()
+        $("pre#services").append(str+"\n")
+      })  
+    }
+  })
+})
+</script>
+
+</head>
+
+<body>
+<pre id="meta"></pre>
+<hr>
+<pre id="users"></pre>
+<hr>
+<pre id="services"></pre>
+<hr>
+<pre id="output"></pre>
+
+</body>
+</html>
