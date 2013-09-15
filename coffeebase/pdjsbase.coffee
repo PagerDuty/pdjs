@@ -1,5 +1,5 @@
 class window.PDJSobj
-  @version = "0.3.1"
+  @version = "PDJS-0.3.1"
   
   logg: (str) ->
     if(this.logging)
@@ -26,9 +26,14 @@ class window.PDJSobj
 
   # If you don't override the callback on error we do the basic error handling
   error_function: (err, callerparams) ->
-    this.logg("Error for "+callerparams.res)
-    this.logg(err.status)
-    this.logg(err.responseText)
+    console.log("Error for "+callerparams.res)
+    console.log(err.status)
+    error_detail = err.responseText
+    try
+      error_detail = JSON.parse(error_detail)
+    catch anyerror
+      this.logg("Not an JSON error")
+    console.log(error_detail)
     # PDJStools.logg(err)
     # TODO Handle these:
     # 0 Failed to connect to anything
@@ -48,6 +53,9 @@ class window.PDJSobj
     params.data.attempt = params.attempt++
     this.logg("params.data:")
     this.logg(params.data)
+    params.type = (params.type||"GET").toUpperCase()
+    if(params.type=="POST" || params.type=="POST") # the update APIs expect the data in the body to be JSON
+      params.data = JSON.stringify(params.data)
     params.headers.Authorization = 'Token token='+this.token
     params.error = params.error || (err) =>
       this.error_function(err, params)

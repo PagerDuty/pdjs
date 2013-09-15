@@ -1,4 +1,4 @@
-pdjs (base)
+PDJS (PagerDuty base JavaScript API)
 ====
 
 This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.pagerduty.com/)
@@ -38,6 +38,48 @@ The **res** parameter may have an ID in it, here's the call to get the [notes](h
         alert(JSON.stringify(json))
       },
     })
+
+POST and PUT requests are supported as well (although I can't give you any live examples, since the API key from webdemo is read-only, so go ahead and [generate an API key](http://support.pagerduty.com/entries/23761081-Generating-an-API-Key) from your own account)
+
+For instance, here I'm adding a contact method for a user: test@example.com, and then adding a notification rule to allert that email address after 900 minutes:
+
+    add_contact_method = function(user_id) {
+      PDJS.api({
+        res: "users/"+user_id+"/contact_methods",
+        type: "POST",
+        data: {
+          contact_method: {
+            type:"email",
+            address:"test4@example.com",
+            label: "Added from PDJS",
+            }
+        },
+        success: function (json) {
+          console.log("New contact method ID: " + json.contact_method.id)
+          add_notification_rule(user_id, json.contact_method.id, 900)
+        }
+      })
+    }
+
+    add_notification_rule = function(user_id, contact_method, start_delay_in_minutes) {
+      PDJS.api({
+        res: "users/"+user_id+"/notification_rules",
+        type: "POST",
+        data: {
+          notification_rule: {
+            contact_method_id: contact_method,
+            start_delay_in_minutes: start_delay_in_minutes,
+            }
+        },
+        success: function (json) {
+          console.log(json)
+          console.log("New notification rule ID: " + json.notification_rule.id)
+        }
+      })
+    }
+
+    add_contact_method("PRJRF7T")
+
 
 
 ## The *api_all* helper
@@ -82,9 +124,12 @@ coffee --output js/ --compile --watch --join pdjsbase.js coffeebase/ &
 
 ## More info
 
-For more info contact [dave@euri.ca](mailto:dave@euri.ca)
+Are you using this?  Let me know: [dave@euri.ca](mailto:dave@euri.ca).  
+
+You might notice that PDJS sends along some extra parameters, even though this is currently a side project of mine, I work for [PagerDuty](http://www.pagerduty.com) and I want to track QoS across our language-specific libraries.
 
 Coming soon:
 
   * The ability to trigger incidents on Generic API services.
+  * [Error](http://developer.pagerduty.com/documentation/rest/errors) handling and throttling
   * More examples
