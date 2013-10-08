@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Trigger a PD incident</title>
+<link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="lib/jquery-1.7.1.min.js"> </script>
+<script src="lib/moment.min.js"> </script>
+<script src="config.js"> </script>
+<script type="text/javascript" src="../js/pdjsbase.js"> </script>
+<script>
+trigger_incident = function() {
+  desc = prompt("Please enter a description")
+  $("<div></div>").appendTo("#res").html("Creating incident with subject: "+desc)  
+  PDJS.trigger({
+    service_key: "5eb2b9dae1b2480abf59f58c78ba06e7",
+    description: desc,
+    details: {
+      source:"PDJS demo page",
+      browser: navigator.userAgent,
+      timezone: ""+(new Date()).getTimezoneOffset()/60
+    },
+    success: function(data) {
+      console.log(data)
+      $("<div></div>").appendTo("#res").html(JSON.stringify(data))
+    }
+  })
+}
+
+$(function(){
+  PDJS = new PDJSobj(pdjs_settings)
+})
+</script>
+</head>
+<body>
+  <button onclick="trigger_incident()" style="padding:40px;font-size:200%;">Trigger an incident</button>
+  <div id="res"></div>
+</body>
+</html>

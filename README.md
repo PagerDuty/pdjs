@@ -133,3 +133,5 @@ Coming soon:
   * The ability to trigger incidents on Generic API services.
   * [Error](http://developer.pagerduty.com/documentation/rest/errors) handling and throttling
   * More examples
+
+Possibly also of interest is [node-pagerduty](https://github.com/Skomski/node-pagerduty) to trigger PagerDuty incidents from node.js.

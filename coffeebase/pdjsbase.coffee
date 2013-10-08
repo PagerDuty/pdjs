@@ -96,3 +96,34 @@ class window.PDJSobj
     this.logg(params)
     this.api(params)  
   
+  # the event API is different enough to have its own function
+  event: (params = {}) ->
+    this.logg("Create an event")
+    params.type = "POST"
+    params.url = "http://events.pagerduty.com/generic/2010-04-15/create_event.json"
+
+    params.data = params.data || {}
+    params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key")
+    params.data.event_type = params.data.event_type || params.event_type || "trigger"
+    params.data.description = params.data.description || params.description || "No description provided"
+    params.data.details = params.data.details || params.details || {}
+    params.data = JSON.stringify(params.data)
+    
+    params.contentType =  "application/json; charset=utf-8"
+    params.dataType = "json"
+    params.error = params.error || (err) =>
+      this.error_function(err, params)
+    params.success = params.success || (data) => 
+      this.no_success_function(data, params)
+    $.ajax(params)
+
+  # Shortcut methods
+  trigger: (params = {}) ->
+    params.event_type = "trigger"
+    this.event(params)
+  acknowledge: (params = {}) ->
+    params.event_type = "acknowledge"
+    this.event(params)
+  resolve: (params = {}) ->
+    params.event_type = "resolve"
+    this.event(params)
