@@ -57,7 +57,8 @@
       params.url = params.url || this.protocol + "://" + this.subdomain + "." + this.server + "/api/" + this.api_version + "/" + params.res;
       params.attempt = params.attempt || 0;
       params.headers = params.headers || {};
-      params.contentType = "application/json";
+      params.contentType = "application/json; charset=utf-8";
+      params.dataType = "json";
       params.data = params.data || {};
       params.data.PDJSversion = PDJSobj.version;
       params.data.request_count = this.req();
@@ -128,7 +129,7 @@
       }
       this.logg("Create an event");
       params.type = "POST";
-      params.url = "http://events.pagerduty.com/generic/2010-04-15/create_event.json";
+      params.url = params.url || this.protocol + "://events." + this.server + "/generic/2010-04-15/create_event.json";
       params.data = params.data || {};
       params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key");
       params.data.event_type = params.data.event_type || params.event_type || "trigger";

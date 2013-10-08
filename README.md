@@ -80,7 +80,26 @@ For instance, here I'm adding a contact method for a user: test@example.com, and
 
     add_contact_method("PRJRF7T")
 
+## Triggering an incident
 
+The [integration API](http://developer.pagerduty.com/documentation/integration/events) has its own function as well
+
+    PDJS.trigger({
+      service_key: "5eb2b9dae1b2480abf59f58c78ba06e7",
+      description: "Server on Fire",
+      incident_key: (new Date()).toString(),
+      details: {
+        cause: "PEBKAC"
+      }
+    })
+    
+Again, you can specify a **success** function that will get JSON representing the incident: 
+
+    {
+      "status":"success",
+      "message":"Event processed",
+      "incident_key":"8a803874eda340a09928f2631a39378d"
+    }
 
 ## The *api_all* helper
 
@@ -92,7 +111,7 @@ There's also a helper method that will handle limits and offsets for lists longe
         since: "2013-08-01T09:53:17-07:00",
         until: "2013-08-14T09:53:17-07:00",
         status: "resolved",
-        fields: "incident_number,status,created_on,service,last_status_change_by,last_status_change_on"
+        fields: "incident_number,status,created_on,service"
       },
       final_success: function(data) {
         console.log(data.total + " objects!");
@@ -116,6 +135,7 @@ There's an examples directory:
 
   * [examples/incidents.html](http://eurica.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
   * [examples/report.html](http://eurica.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
+  * [examples/trigger.html](http://eurica.github.io/pdjs/examples/trigger.html) shows how to trigger an incident
 
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript

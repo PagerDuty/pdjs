@@ -46,7 +46,8 @@ class window.PDJSobj
     params.url = params.url || @protocol+"://"+@subdomain+"."+this.server+"/api/"+@api_version+"/"+params.res
     params.attempt = params.attempt || 0
     params.headers = params.headers || {}
-    params.contentType = "application/json"
+    params.contentType = "application/json; charset=utf-8"
+    params.dataType = "json"
     params.data = params.data || {}
     params.data.PDJSversion = PDJSobj.version
     params.data.request_count = this.req()
@@ -100,7 +101,7 @@ class window.PDJSobj
   event: (params = {}) ->
     this.logg("Create an event")
     params.type = "POST"
-    params.url = "http://events.pagerduty.com/generic/2010-04-15/create_event.json"
+    params.url = params.url || @protocol+"://events."+this.server+"/generic/2010-04-15/create_event.json"
 
     params.data = params.data || {}
     params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key")
@@ -121,6 +122,7 @@ class window.PDJSobj
   trigger: (params = {}) ->
     params.event_type = "trigger"
     this.event(params)
+  # Todo: add some examples to the docs
   acknowledge: (params = {}) ->
     params.event_type = "acknowledge"
     this.event(params)
