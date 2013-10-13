@@ -1,6 +1,5 @@
 class window.PDJSobj
-  @version = "PDJS-0.3.1"
-  
+  @version = "PDJS-0.4.5"
   logg: (str) ->
     if(this.logging)
       console.log(str)  
@@ -129,3 +128,4 @@ class window.PDJSobj
   resolve: (params = {}) ->
     params.event_type = "resolve"
     this.event(params)
+

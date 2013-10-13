@@ -140,7 +140,7 @@ There's an examples directory:
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
 
-coffee --output js/ --compile --watch --join pdjsbase.js coffeebase/ &
+coffee --output js/ --compile --watch --join pdjsbase.js coffee/ &
 
 ## More info
 
