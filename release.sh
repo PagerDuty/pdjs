@@ -17,12 +17,14 @@ sed -E -i '' s/VERSIONNUMBER/${version}/g coffee/pdjsbase.coffee
 cp coffee/* ${releasedir}/coffee/
 
 # prepare a release
-cwd=$(pwd)
 coffee --output ${releasedir}/ --compile --join pdjs.js coffee/
 cp README.* ${releasedir}/
-cp examples ${releasedir}/
+cp examples/* ${releasedir}/examples/
+
+cwd=$(pwd)
 cd ${releasedir}/
 cp pdjs.js js/pdjs-${version}.js
+cp pdjs.js js/pdjs.js
 git add .
 git commit -m "preparing version ${version} for github pages"
 git push origin gh-pages

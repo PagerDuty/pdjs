@@ -3,7 +3,7 @@ PDJS (PagerDuty base JavaScript API)
 
 This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.pagerduty.com/)
 
-Include [jQuery](http://jquery.com/) and [pdjsbase.js](http://eurica.github.io/pdjs/js/pdjsbase.js)
+Include [jQuery](http://jquery.com/) and [pdjsbase.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
       subdomain: "webdemo",
@@ -140,7 +140,7 @@ There's an examples directory:
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
 
-coffee --output js/ --compile --watch --join pdjsbase.js coffee/ &
+coffee --output js/ --compile --watch --join pdjs.js coffee/ &
 
 ## More info
 
