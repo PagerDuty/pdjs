@@ -3,7 +3,7 @@ PDJS (PagerDuty base JavaScript API)
 
 This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.pagerduty.com/)
 
-Include [jQuery](http://jquery.com/) and [pdjsbase.js](http://eurica.github.io/pdjs/js/pdjs.js)
+Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
       subdomain: "webdemo",
