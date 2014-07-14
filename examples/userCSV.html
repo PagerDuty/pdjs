@@ -1,0 +1,62 @@
+<html>
+<head>
+
+<link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="lib/jquery-1.7.1.min.js"> </script>
+<script src="lib/Blob.js"> </script>
+<script src="lib/FileSaver.js"> </script>
+<script type="text/javascript" src="../js/pdjs.js"> </script>
+<script>
+
+
+userstoCSV = function() {
+  pdjs_settings = {
+    subdomain: $("#subdomain").val(),
+    token: $("#apikey").val(),
+    refresh: 15,
+  }
+
+  PDJS = new PDJSobj(pdjs_settings)
+   window.PDJS = PDJS
+   PDJS.api_all({
+     res: "users",
+     data: {
+     },
+     incremental_success: function(data) {
+         $("#status").append(" Loading.");
+     },
+     final_success: function(data) {
+       $("#status").append(" Processing");
+       console.log(data.total + " objects!")
+       datatoCSV(data);
+     }
+   })
+}
+
+datatoCSV = function(data) {
+  console.log(data)
+  users = "id, name, email, role, time_zone\n"
+  jQuery.each( data.users, function(index, value){
+    u = value.id + "," + value.name + "," + value.email + "," + value.role + "," +  value.time_zone + "\n"
+    users = users + u
+  })
+  var blob = new Blob([users], {type: "application/CSV"});
+  saveAs(blob, $("#subdomain").val() + "-users.csv");
+  
+  console.log(users)
+}
+
+</script>
+
+</head>
+
+<body>
+<ol>
+  <li>Enter your subdomain: <input type="text" size="60" id="subdomain" value="webdemo">
+  <li>Enter your API key: <input type="text" size="60" id="apikey" value="CkNpsqH9i6yTGus8VDzA">
+  <li>Click <input type="button" value="Export users to CSV" onclick="userstoCSV()">    
+</ol>
+Status:
+<pre id="status">Ready.</pre>
+</body>
+</html>
