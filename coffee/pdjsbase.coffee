@@ -54,7 +54,7 @@ class window.PDJSobj
     this.logg("params.data:")
     this.logg(params.data)
     params.type = (params.type||"GET").toUpperCase()
-    if(params.type=="POST" || params.type=="POST") # the update APIs expect the data in the body to be JSON
+    if(params.type=="POST" || params.type=="PUT") # the update APIs expect the data in the body to be JSON
       params.data = JSON.stringify(params.data)
     params.headers.Authorization = 'Token token='+this.token
     params.error = params.error || (err) =>
