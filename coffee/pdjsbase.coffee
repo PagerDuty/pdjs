@@ -1,5 +1,5 @@
 class window.PDJSobj
-  @version = "PDJS-0.4.5"
+  @version = "PDJS-0.4.8"
   logg: (str) ->
     if(this.logging)
       console.log(str)  
@@ -8,6 +8,7 @@ class window.PDJSobj
 
   constructor: (params = {}) ->
     this.subdomain = params.subdomain
+    this.async = params.async == false ? false : true;
     this.token = params.token
     this.refresh = params.refresh || 60
     this.refresh_in_ms = this.refresh * 1000
@@ -44,6 +45,7 @@ class window.PDJSobj
     #PDJStools.logg(params)
     params.url = params.url || @protocol+"://"+@subdomain+"."+this.server+"/api/"+@api_version+"/"+params.res
     params.attempt = params.attempt || 0
+    params.async = params.async || this.async # For batch jobs, async helps us avoid getting throttled
     params.headers = params.headers || {}
     params.contentType = "application/json; charset=utf-8"
     params.dataType = "json"
@@ -54,7 +56,7 @@ class window.PDJSobj
     this.logg("params.data:")
     this.logg(params.data)
     params.type = (params.type||"GET").toUpperCase()
-    if(params.type=="POST" || params.type=="POST") # the update APIs expect the data in the body to be JSON
+    if(params.type=="POST" || params.type=="PUT") # the update APIs expect the data in the body to be JSON
       params.data = JSON.stringify(params.data)
     params.headers.Authorization = 'Token token='+this.token
     params.error = params.error || (err) =>
@@ -105,6 +107,7 @@ class window.PDJSobj
     params.data = params.data || {}
     params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key")
     params.data.event_type = params.data.event_type || params.event_type || "trigger"
+    params.data.incident_key = params.data.incident_key || params.incident_key || "Please specify an incident_key"
     params.data.client = params.data.client || params.client if params.client
     params.data.client_url = params.data.client_url || params.client_url if params.client_url
     params.data.description = params.data.description || params.description || "No description provided"

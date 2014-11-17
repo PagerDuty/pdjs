@@ -7,7 +7,12 @@
 <script src="lib/FileSaver.js"> </script>
 <script type="text/javascript" src="../js/pdjs.js"> </script>
 <script>
-
+$(function() {
+  if(location.href.indexOf(",")>0) {
+    $("#subdomain").val(location.hash.split(",")[0].replace(/#/,""))
+    $("#apikey").val(location.hash.split(",")[1])
+  }
+})
 
 userstoCSV = function() {
   pdjs_settings = {
@@ -51,12 +56,12 @@ datatoCSV = function(data) {
 </head>
 
 <body>
+This will download your PagerDuty users as a CSV:
 <ol>
   <li>Enter your subdomain: <input type="text" size="60" id="subdomain" value="webdemo">
-  <li>Enter your API key: <input type="text" size="60" id="apikey" value="CkNpsqH9i6yTGus8VDzA">
+  <li>Enter your API key: <input type="text" size="60" id="apikey" value="CkNpsqH9i6yTGus8VDzA"> (<a href="https://support.pagerduty.com/entries/23761081-Generating-an-API-Key">what is an API key?</a>)
   <li>Click <input type="button" value="Export users to CSV" onclick="userstoCSV()">    
 </ol>
-Status:
-<pre id="status">Ready.</pre>
+<pre id="status">Status: Ready.</pre>
 </body>
 </html>
