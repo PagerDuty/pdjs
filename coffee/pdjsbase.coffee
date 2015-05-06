@@ -112,6 +112,7 @@ class window.PDJSobj
     params.data.client_url = params.data.client_url || params.client_url if params.client_url
     params.data.description = params.data.description || params.description || "No description provided"
     params.data.details = params.data.details || params.details || {}
+    params.data.contexts = params.data.contexts || params.contexts || {}
     params.data = JSON.stringify(params.data)
     
     params.contentType =  "application/json; charset=utf-8"
