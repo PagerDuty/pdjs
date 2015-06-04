@@ -27,5 +27,5 @@ cp pdjs.js js/pdjs-${version}.js
 cp pdjs.js js/pdjs.js
 git add .
 git commit -m "preparing version ${version} for github pages"
-git push origin gh-pages
+git push origin gh-pages --force
 cd ${cwd}
