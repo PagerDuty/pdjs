@@ -22,27 +22,35 @@ userstoCSV = function() {
   }
 
   PDJS = new PDJSobj(pdjs_settings)
-   window.PDJS = PDJS
-   PDJS.api_all({
-     res: "users",
-     data: {
-     },
-     incremental_success: function(data) {
-         $("#status").append(" Loading.");
-     },
-     final_success: function(data) {
-       $("#status").append(" Processing");
-       console.log(data.total + " objects!")
-       datatoCSV(data);
-     }
-   })
+  window.PDJS = PDJS
+  PDJS.api_all({
+    res: "users",
+    data: {
+      "include":["contact_methods"]
+    },
+    incremental_success: function(data) {
+      $("#status").append(" Loading.");
+    },
+    final_success: function(data) {
+      $("#status").append(" Processing");
+      console.log(data.total + " objects!")
+      datatoCSV(data);
+    }
+  })
 }
 
 datatoCSV = function(data) {
   console.log(data)
-  users = "id, name, email, role, time_zone\n"
+  users = "id, name, email, phone, role, time_zone\n"
   jQuery.each( data.users, function(index, value){
-    u = value.id + "," + value.name + "," + value.email + "," + value.role + "," +  value.time_zone + "\n"
+    console.log(value)
+    phone = ""
+    jQuery.each( value.contact_methods, function (index, contact_method) {
+      if (contact_method.type == "phone"){
+        phone = contact_method.address
+      }
+    })
+    u = value.id + "," + value.name + "," + value.email + "," + phone + "," + value.role + "," +  value.time_zone + "\n"
     users = users + u
   })
   var blob = new Blob([users], {type: "application/CSV"});
