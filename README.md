@@ -1,12 +1,11 @@
 PDJS (PagerDuty base JavaScript API)
 ====
 
-This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.pagerduty.com/)
+This is a simple JavaScript wrapper to the [PagerDuty API](https://v2.developer.pagerduty.com/v2/docs)
 
 Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
-      subdomain: "webdemo",
       token: "CkNpsqH9i6yTGus8VDzA",
     })
 
@@ -22,7 +21,7 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
 
 ## Making an API request
 
-1. Create a PDJSobj, with a subdomain and a token/api key
+1. Create a PDJSobj, with a token/api key
 2. Call an api request:
   * the **res** parameter is the URL path of the resource you want
   * the **data** parameter is optional
@@ -30,7 +29,7 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
   * a *function* to use on **success**
   * also optional is an **error** function
 
-The **res** parameter may have an ID in it, here's the call to get the [notes](http://developer.pagerduty.com/documentation/rest/incidents/notes/list) for incident PNCII2E
+The **res** parameter may have an ID in it, here's the call to get the [notes](https://v2.developer.pagerduty.com/v2/page/api-reference#!/Incidents/get_incidents_id_notes) for incident PNCII2E
 
     PDJS.api({
       res: "incidents/PNCII2E/notes",
@@ -151,7 +150,7 @@ You might notice that PDJS sends along some extra parameters, even though this i
 Coming soon:
 
   * The ability to trigger incidents on Generic API services.
-  * [Error](http://developer.pagerduty.com/documentation/rest/errors) handling and throttling
+  * [Error](https://v2.developer.pagerduty.com/docs/errors) handling and throttling
   * More examples
 
 Possibly also of interest is [node-pagerduty](https://github.com/Skomski/node-pagerduty) to trigger PagerDuty incidents from node.js.
