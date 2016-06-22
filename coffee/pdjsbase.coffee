@@ -1,5 +1,5 @@
 class window.PDJSobj
-  @version = "PDJS-0.5.0"
+  @version = "PDJS-1.0.0"
   logg: (str) ->
     if(this.logging)
       console.log(str)
