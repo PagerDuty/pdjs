@@ -1,4 +1,4 @@
 var pdjs_settings = {
-  token: "sX262TSwvkkUeMHxdz8L",
+  token: "e8Ks3JRD9f2i982F5WuL",
   refresh: 15,
 }
