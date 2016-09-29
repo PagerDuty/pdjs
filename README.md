@@ -6,17 +6,17 @@ This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.page
 Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
-      subdomain: "webdemo",
-      token: "CkNpsqH9i6yTGus8VDzA",
+      subdomain: 'webdemo',
+      token: 'CkNpsqH9i6yTGus8VDzA',
     })
 
     PDJS.api({
-      res: "services",
+      res: 'services',
       data: {
         limit: 20,
       },
-      success: function (json) {
-        console.log(JSON.stringify(json))
+      success: function (data) {
+        console.log(data)
       },
     })
 
@@ -33,9 +33,9 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
 The **res** parameter may have an ID in it, here's the call to get the [notes](http://developer.pagerduty.com/documentation/rest/incidents/notes/list) for incident PNCII2E
 
     PDJS.api({
-      res: "incidents/PNCII2E/notes",
-      success: function (json) {
-        alert(JSON.stringify(json))
+      res: 'incidents/PNCII2E/notes',
+      success: function (data) {
+        alert(JSON.stringify(data))
       },
     })
 
@@ -45,60 +45,60 @@ For instance, here I'm adding a contact method for a user: test@example.com, and
 
     add_contact_method = function(user_id) {
       PDJS.api({
-        res: "users/"+user_id+"/contact_methods",
-        type: "POST",
+        res: 'users/'+user_id+'/contact_methods',
+        type: 'POST',
         data: {
           contact_method: {
-            type:"email",
-            address:"test4@example.com",
-            label: "Added from PDJS",
-            }
+            type:'email',
+            address:'test4@example.com',
+            label: 'Added from PDJS',
+          }
         },
-        success: function (json) {
-          console.log("New contact method ID: " + json.contact_method.id)
-          add_notification_rule(user_id, json.contact_method.id, 900)
+        success: function (data) {
+          console.log('New contact method ID: ' + data.contact_method.id)
+          add_notification_rule(user_id, data.contact_method.id, 900)
         }
       })
     }
 
     add_notification_rule = function(user_id, contact_method, start_delay_in_minutes) {
       PDJS.api({
-        res: "users/"+user_id+"/notification_rules",
-        type: "POST",
+        res: 'users/'+user_id+'/notification_rules',
+        type: 'POST',
         data: {
           notification_rule: {
             contact_method_id: contact_method,
             start_delay_in_minutes: start_delay_in_minutes,
-            }
+          }
         },
-        success: function (json) {
-          console.log(json)
-          console.log("New notification rule ID: " + json.notification_rule.id)
+        success: function (data) {
+          console.log(data)
+          console.log('New notification rule ID: ' + data.notification_rule.id)
         }
       })
     }
 
-    add_contact_method("PRJRF7T")
+    add_contact_method('PRJRF7T')
 
 ## Triggering an incident
 
 The [integration API](http://developer.pagerduty.com/documentation/integration/events) has its own function as well
 
     PDJS.trigger({
-      service_key: "5eb2b9dae1b2480abf59f58c78ba06e7",
-      description: "Server on Fire",
+      service_key: '5eb2b9dae1b2480abf59f58c78ba06e7',
+      description: 'Server on Fire',
       incident_key: (new Date()).toString(),
       details: {
-        cause: "PEBKAC"
+        cause: 'PEBKAC'
       }
     })
-    
-Again, you can specify a **success** function that will get JSON representing the incident: 
+
+Again, you can specify a **success** function that will get a JavaScript object representing the incident:
 
     {
-      "status":"success",
-      "message":"Event processed",
-      "incident_key":"8a803874eda340a09928f2631a39378d"
+      status: 'success',
+      message: 'Event processed',
+      incident_key: '8a803874eda340a09928f2631a39378d'
     }
 
 ## The *api_all* helper
@@ -106,19 +106,19 @@ Again, you can specify a **success** function that will get JSON representing th
 There's also a helper method that will handle limits and offsets for lists longer than 100 elements:
 
     PDJS.api_all({
-      res: "incidents",
+      res: 'incidents',
       data: {
-        since: "2013-08-01T09:53:17-07:00",
-        until: "2013-08-14T09:53:17-07:00",
-        status: "resolved",
-        fields: "incident_number,status,created_on,service"
+        since: '2013-08-01T09:53:17-07:00',
+        until: '2013-08-14T09:53:17-07:00',
+        status: 'resolved',
+        fields: 'incident_number,status,created_on,service'
       },
       final_success: function(data) {
-        console.log(data.total + " objects!");
+        console.log(data.total + ' objects!');
         console.log(data);
       },
       incremental_success: function(data) {
-        console.log("Got data");
+        console.log('Got data');
       }
     })
 
