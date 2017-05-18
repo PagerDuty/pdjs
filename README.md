@@ -7,7 +7,7 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
 
     PDJS = new PDJSobj({
       subdomain: 'webdemo',
-      token: 'CkNpsqH9i6yTGus8VDzA',
+      token: 'rcgtBVpizBZQjDzE3Hub',
     })
 
     PDJS.api({
@@ -144,7 +144,7 @@ coffee --output js/ --compile --watch --join pdjs.js coffee/ &
 
 ## More info
 
-Are you using this?  Let me know: [dave@euri.ca](mailto:dave@euri.ca).  
+Are you using this?  Let me know: [dave@euri.ca](mailto:dave@euri.ca).
 
 You might notice that PDJS sends along some extra parameters, even though this is currently a side project of mine, I work for [PagerDuty](http://www.pagerduty.com) and I want to track QoS across our language-specific libraries.
 
