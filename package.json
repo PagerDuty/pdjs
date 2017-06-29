@@ -1,6 +1,6 @@
 {
   "name": "pdjs",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "JavaScript wrapper for the PagerDuty API",
   "main": "index.js",
   "directories": {
