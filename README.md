@@ -41,7 +41,7 @@ The **res** parameter may have an ID in it, here's the call to get the [notes](h
 
 POST and PUT requests are supported as well (although I can't give you any live examples, since the API key from webdemo is read-only, so go ahead and [generate an API key](http://support.pagerduty.com/entries/23761081-Generating-an-API-Key) from your own account)
 
-For instance, here I'm adding a contact method for a user: test@example.com, and then adding a notification rule to allert that email address after 900 minutes:
+For instance, here I'm adding a contact method for a user: test@example.com, and then adding a notification rule to alert that email address after 900 minutes:
 
     add_contact_method = function(user_id) {
       PDJS.api({
