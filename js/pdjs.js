@@ -28,6 +28,7 @@
       this.server = params.server || "pagerduty.com";
       this.logging = params.logging || false;
       this.req_count = 1;
+      this.api_version = params.api_version || "v2";
       this.logg("Initializing PDJSobj");
     }
 
@@ -61,9 +62,9 @@
       params.headers = params.headers || {};
       params.contentType = "application/json; charset=utf-8";
       params.dataType = "json";
-      params.accepts = {
-        json: 'application/vnd.pagerduty+json;version=2'
-      };
+      if(this.api_version == "v2"){
+        params.accepts = {json: 'application/vnd.pagerduty+json;version=2'};
+      }
       params.data = params.data || {};
       params.data.PDJSversion = PDJSobj.version;
       params.data.request_count = this.req();
@@ -159,6 +160,9 @@
       params.data = JSON.stringify(params.data);
       params.contentType = "application/json; charset=utf-8";
       params.dataType = "json";
+      if(this.api_version == "v2"){
+        params.accepts = {json: 'application/vnd.pagerduty+json;version=2'};
+      }
       params.error = params.error || (function(_this) {
         return function(err) {
           return _this.error_function(err, params);
