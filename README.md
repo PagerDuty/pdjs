@@ -80,7 +80,21 @@ For instance, here I'm adding a contact method for a user: test@example.com, and
 
     add_contact_method('PRJRF7T')
 
-## Triggering an incident
+## Triggering an incident (V2)
+
+With Events API V2, alerts can be grouped with the same dedup_key.
+
+PDJS.trigger({
+  routing_key: '<v2 integration key>',
+  event_action: 'trigger',
+  data: {
+    summary: 'Server on Fire',
+    source: 'pdjs',
+    severity: 'info'
+    }
+  })
+
+## Triggering an incident (V2)
 
 The [integration API](http://developer.pagerduty.com/documentation/integration/events) has its own function as well
 
