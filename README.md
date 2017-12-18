@@ -6,15 +6,16 @@ This is a simple JavaScript wrapper to the [PagerDuty API](http://developer.page
 ## Making an API request
 
 1. Create a PDJSobj, with a subdomain and a token/api key
+
 Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
       subdomain: 'webdemo',
       token: 'rcgtBVpizBZQjDzE3Hub',
     })
+    
   This configuration uses version 2 of the PagerDuty REST and Events API as default. To request version 1, the api version needs to be specified on instantiation of the PDJSObj. The **api_version** parameter is optional.
   
-Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
       subdomain: 'webdemo',
@@ -26,7 +27,7 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
   * the **res** parameter is the URL path of the resource you want
   * the **data** parameter is optional
   
-  Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
+  
   
     PDJS.api({
       res: 'services',
