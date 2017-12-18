@@ -26,10 +26,8 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
 2. Call an api request:
   * the **res** parameter is the URL path of the resource you want
   * the **data** parameter is optional
-  
-  
-  
-    PDJS.api({
+
+   ``` PDJS.api({
       res: 'services',
       data: {
         limit: 20,
@@ -37,7 +35,7 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
       success: function (data) {
         console.log(data)
       },
-    })
+    })```
     
 3. Everything is asynchronous so you'll need:
   * a *function* to use on **success**i
