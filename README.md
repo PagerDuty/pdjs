@@ -150,6 +150,7 @@ There's an examples directory:
   * [examples/incidents.html](http://eurica.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
   * [examples/report.html](http://eurica.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
   * [examples/trigger.html](http://eurica.github.io/pdjs/examples/trigger.html) shows how to trigger an incident
+  * Some of our [addon examples](https://github.com/PagerDuty/addons/) use it
 
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
@@ -158,14 +159,8 @@ coffee --output js/ --compile --watch --join pdjs.js coffee/ &
 
 ## More info
 
-Are you using this?  Let me know: [dave@euri.ca](mailto:dave@euri.ca).
+Are you using this?  Let us know! @pagerduty or add it to our addons repo: https://github.com/PagerDuty/addons/
 
-You might notice that PDJS sends along some extra parameters, even though this is currently a side project of mine, I work for [PagerDuty](http://www.pagerduty.com) and I want to track QoS across our language-specific libraries.
-
-Coming soon:
-
-  * The ability to trigger incidents on Generic API services.
-  * [Error](http://developer.pagerduty.com/documentation/rest/errors) handling and throttling
-  * More examples
+You might notice that PDJS sends along some extra parameters, nothing scary, we use those to track QoS across our language-specific libraries.
 
 Possibly also of interest is [node-pagerduty](https://github.com/Skomski/node-pagerduty) to trigger PagerDuty incidents from node.js.
