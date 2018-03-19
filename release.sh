@@ -19,7 +19,7 @@ cp coffee/* ${releasedir}/coffee/
 # prepare a release
 coffee --output ${releasedir}/ --compile --join pdjs.js coffee/
 cp README.* ${releasedir}/
-cp examples/* ${releasedir}/examples/
+cp -r examples/* ${releasedir}/examples/
 
 cwd=$(pwd)
 cd ${releasedir}/
