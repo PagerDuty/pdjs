@@ -3,7 +3,7 @@ PDJS (PagerDuty base JavaScript API)
 
 This is a simple JavaScript wrapper to the [PagerDuty API](https://v2.developer.pagerduty.com/v2/docs)
 
-Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
+Include [jQuery](http://jquery.com/) and [pdjs.js](https://pagerduty.github.io/pdjs/js/pdjs.js)
 
     PDJS = new PDJSobj({
       token: "****************VDzA",
@@ -146,9 +146,9 @@ That's kind of nifty.
 
 There's an examples directory:
 
-  * [examples/incidents.html](http://eurica.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
-  * [examples/report.html](http://eurica.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
-  * [examples/trigger.html](http://eurica.github.io/pdjs/examples/trigger.html) shows how to trigger an incident
+  * [examples/incidents.html](https://pagerduty.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
+  * [examples/report.html](https://pagerduty.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
+  * [examples/trigger.html](https://pagerduty.github.io/pdjs/examples/trigger.html) shows how to trigger an incident
   * Some of our [addon examples](https://github.com/PagerDuty/addons/) use it
 
 ## To compile the base script:
