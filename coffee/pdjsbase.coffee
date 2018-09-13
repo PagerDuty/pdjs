@@ -1,13 +1,12 @@
 class window.PDJSobj
-  @version = "PDJS-0.5.0"
+  @version = "PDJS-1.0.0"
   logg: (str) ->
     if(this.logging)
-      console.log(str)  
+      console.log(str)
   req: () ->
     return this.req_count++
 
   constructor: (params = {}) ->
-    this.subdomain = params.subdomain
     this.async = params.async == false ? false : true;
     this.token = params.token
     this.refresh = params.refresh || 60
@@ -16,7 +15,6 @@ class window.PDJSobj
     this.server = params.server || "pagerduty.com"
     this.logging = params.logging || false
     this.req_count = 1
-    @api_version = "v1"
     this.logg("Initializing PDJSobj")
 
   # If you don't specify a callback, show something useful for debugging
@@ -43,12 +41,13 @@ class window.PDJSobj
   api: (params = {}) ->
     this.logg("Call to API: "+ params.res)
     #PDJStools.logg(params)
-    params.url = params.url || @protocol+"://"+@subdomain+"."+this.server+"/api/"+@api_version+"/"+params.res
+    params.url = params.url || @protocol+"://api."+this.server+"/"+params.res
     params.attempt = params.attempt || 0
     params.async = params.async || this.async # For batch jobs, async helps us avoid getting throttled
     params.headers = params.headers || {}
     params.contentType = "application/json; charset=utf-8"
     params.dataType = "json"
+    params.accepts = { json: 'application/vnd.pagerduty+json;version=2' }
     params.data = params.data || {}
     params.data.PDJSversion = PDJSobj.version
     params.data.request_count = this.req()
@@ -61,7 +60,7 @@ class window.PDJSobj
     params.headers.Authorization = 'Token token='+this.token
     params.error = params.error || (err) =>
       this.error_function(err, params)
-    params.success = params.success || (data) => 
+    params.success = params.success || (data) =>
       this.no_success_function(data, params)
     this.logg(params)
     $.ajax(params)
@@ -71,9 +70,9 @@ class window.PDJSobj
     params.data = params.data || {}
     params.data.limit = 100
     params.data.offset = params.data.offset || 0
-    params.final_success = params.final_success || (data) => 
+    params.final_success = params.final_success || (data) =>
       this.no_success_function(data, params)
-    params.incremental_success = params.incremental_success || (data) => 
+    params.incremental_success = params.incremental_success || (data) =>
       0
     params.success = (data) =>
       data.res = params.res
@@ -96,8 +95,8 @@ class window.PDJSobj
         params.final_success(data)
 
     this.logg(params)
-    this.api(params)  
-  
+    this.api(params)
+
   # the event API is different enough to have its own function
   event: (params = {}) ->
     this.logg("Create an event")
@@ -114,12 +113,12 @@ class window.PDJSobj
     params.data.details = params.data.details || params.details || {}
     params.data.contexts = params.data.contexts || params.contexts || {}
     params.data = JSON.stringify(params.data)
-    
+
     params.contentType =  "application/json; charset=utf-8"
     params.dataType = "json"
     params.error = params.error || (err) =>
       this.error_function(err, params)
-    params.success = params.success || (data) => 
+    params.success = params.success || (data) =>
       this.no_success_function(data, params)
     $.ajax(params)
 
@@ -134,4 +133,3 @@ class window.PDJSobj
   resolve: (params = {}) ->
     params.event_type = "resolve"
     this.event(params)
-

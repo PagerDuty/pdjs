@@ -1,5 +1,4 @@
 var pdjs_settings = {
-  subdomain: "webdemo",
-  token: "CkNpsqH9i6yTGus8VDzA",
+  token: "e8Ks3JRD9f2i982F5WuL",
   refresh: 15,
 }
