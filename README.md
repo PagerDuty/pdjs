@@ -9,10 +9,12 @@ This is a simple JavaScript wrapper to the [PagerDuty API](https://v2.developer.
 
 Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/js/pdjs.js)
 
+```
     PDJS = new PDJSobj({
       token: "****************VDzA",
     })
-    
+```
+
   This configuration uses version 2 of the PagerDuty REST and Events API as default. To request version 1, the api version needs to be specified on instantiation of the PDJSObj. The **api_version** parameter is optional.
   
 
@@ -44,17 +46,19 @@ Include [jQuery](http://jquery.com/) and [pdjs.js](http://eurica.github.io/pdjs/
   * the **data** parameter is optional
 
 3. Everything is asynchronous so you'll need:
-  * a *function* to use on **success**i
+  * a *function* to use on **success**
   * also optional is an **error** function
 
 The **res** parameter may have an ID in it, here's the call to get the [notes](https://v2.developer.pagerduty.com/v2/page/api-reference#!/Incidents/get_incidents_id_notes) for incident PNCII2E
 
+```
     PDJS.api({
       res: 'incidents/PNCII2E/notes',
       success: function (data) {
         alert(JSON.stringify(data))
       },
     })
+```
 
 POST and PUT requests are supported as well (although I can't give you any live examples, since the API key from webdemo is read-only, so go ahead and [generate an API key](http://support.pagerduty.com/entries/23761081-Generating-an-API-Key) from your own account)
 
@@ -101,6 +105,7 @@ For instance, here I'm adding a contact method for a user: test@example.com, and
 
 With Events API V2, alerts can be grouped with the same dedup_key.
 
+```
 PDJS.trigger({
   routing_key: '<v2 integration key>',
   event_action: 'trigger',
@@ -110,6 +115,7 @@ PDJS.trigger({
     severity: 'info'
     }
   })
+```
 
 ## Triggering an incident (V2)
 
@@ -172,7 +178,7 @@ There's an examples directory:
 ## To compile the base script:
 This is written in [CoffeeScript](http://coffeescript.org/), so you're going to have to compile it to get JavaScript
 
-coffee --output js/ --compile --watch --join pdjs.js coffee/ &
+`coffee --output js/ --compile --watch --join pdjs.js coffee/ &`
 
 ## More info
 
