@@ -1,5 +1,5 @@
 class window.PDJSobj
-  @version = "PDJS-1.0.0"
+  @version = "PDJS-1.1.0"
   logg: (str) ->
     if(this.logging)
       console.log(str)
@@ -63,7 +63,7 @@ class window.PDJSobj
     params.success = params.success || (data) =>
       this.no_success_function(data, params)
     this.logg(params)
-    $.ajax(params)
+    this.sendRequest(params)
 
   # For list queries, this will recursively keep getting the next offset
   api_all: (params = {}, datasofar=[]) ->
@@ -120,7 +120,7 @@ class window.PDJSobj
       this.error_function(err, params)
     params.success = params.success || (data) =>
       this.no_success_function(data, params)
-    $.ajax(params)
+    this.sendRequest(params)
 
   # Shortcut methods
   trigger: (params = {}) ->
@@ -133,3 +133,32 @@ class window.PDJSobj
   resolve: (params = {}) ->
     params.event_type = "resolve"
     this.event(params)
+
+
+  sendRequest: (params = {}) ->
+    { accepts, contentType, data, error, headers, success, type, url } = params
+    xhr = new XMLHttpRequest();
+
+    if type is 'GET'
+      query = ''
+      Object.keys(data).map (key) ->
+        if query != ''
+          query += '&'
+        query += key + '=' + encodeURIComponent(data[key])
+
+      url += '?' + query
+
+    xhr.open(type, url)
+    xhr.setRequestHeader('Content-Type', contentType)
+    xhr.setRequestHeader('Authorization', headers.Authorization)
+
+    if accepts?.json?
+      xhr.setRequestHeader('Accept', accepts.json)
+
+    xhr.onload = () ->
+      if xhr.status is 200
+          success(JSON.parse(xhr.responseText))
+      else if xhr.status isnt 200
+          error(JSON.parse(xhr.responseText))
+
+    xhr.send(JSON.stringify(data))
