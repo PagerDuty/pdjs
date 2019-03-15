@@ -6,22 +6,19 @@
 <script src="lib/Blob.js"> </script>
 <script src="lib/FileSaver.js"> </script>
 <script type="text/javascript" src="../js/pdjs.js"> </script>
+<script src="config.js"> </script>
+
 <script>
-$(function() {
-  if(location.href.indexOf(",")>0) {
-    $("#subdomain").val(location.hash.split(",")[0].replace(/#/,""))
-    $("#apikey").val(location.hash.split(",")[1])
-  }
-})
+  
+// $(function() {
+//   if(location.href.indexOf(",")>0) { 
+//     $("#subdomain").val(location.hash.split(",")[0].replace(/#/,""))
+//     $("#apikey").val(location.hash.split(",")[1])
+//   }
+// })
 
 userstoCSV = function() {
-  pdjs_settings = {
-    subdomain: $("#subdomain").val(),
-    token: $("#apikey").val(),
-    refresh: 15,
-  }
-
-  PDJS = new PDJSobj(pdjs_settings)
+  var PDJS = new PDJSobj(pdjs_settings)
   window.PDJS = PDJS
   PDJS.api_all({
     res: "users",
@@ -29,34 +26,34 @@ userstoCSV = function() {
       "include":["contact_methods"]
     },
     incremental_success: function(data) {
-      $("#status").append(" Loading.");
+      document.getElementById("status").append(" Loading");
     },
     final_success: function(data) {
-      $("#status").append(" Processing");
-      console.log(data.total + " objects!")
+      console.log(data);
+      document.getElementById("status").append(" Processing");
+      console.log(data.users.length + " users!")
       datatoCSV(data);
     }
   })
 }
 
 datatoCSV = function(data) {
-  console.log(data)
-  users = "id, name, email, phone, role, time_zone\n"
-  jQuery.each( data.users, function(index, value){
-    console.log(value)
-    phone = ""
-    jQuery.each( value.contact_methods, function (index, contact_method) {
-      if (contact_method.type == "phone"){
-        phone = contact_method.address
-      }
-    })
-    u = value.id + "," + value.name + "," + value.email + "," + phone + "," + value.role + "," +  value.time_zone + "\n"
-    users = users + u
-  })
-  var blob = new Blob([users], {type: "application/CSV"});
-  saveAs(blob, $("#subdomain").val() + "-users.csv");
+  console.log(data);
+  var outputToCsv = "id, name, email, phone, role, time_zone\n";
   
-  console.log(users)
+  data.users.map((user) => {
+    console.log(user);
+    phone = "";
+    user.contact_methods.filter(method => method.type === "phone_contact_method")
+                        .map(contact => phone = contact.address);
+ 
+    u = user.id + "," + user.name + "," + user.email + "," + phone + "," + user.role + "," +  user.time_zone + "\n";
+    outputToCsv += u;
+  })
+  var blob = new Blob([outputToCsv], {type: "application/CSV"});
+  saveAs(blob, pdjs_settings.subdomain + "-users.csv");
+  
+  console.log(outputToCsv)
 }
 
 </script>
@@ -66,10 +63,12 @@ datatoCSV = function(data) {
 <body>
 This will download your PagerDuty users as a CSV:
 <ol>
-  <li>Enter your subdomain: <input type="text" size="60" id="subdomain" value="webdemo">
-  <li>Enter your API key: <input type="text" size="60" id="apikey" value="CkNpsqH9i6yTGus8VDzA"> (<a href="https://support.pagerduty.com/entries/23761081-Generating-an-API-Key">what is an API key?</a>)
+  <li>Your subdomain: <span id="subdomain"></span></li>
   <li>Click <input type="button" value="Export users to CSV" onclick="userstoCSV()">    
 </ol>
 <pre id="status">Status: Ready.</pre>
 </body>
+<script>
+    document.getElementById('subdomain').innerHTML = pdjs_settings.subdomain;
+</script>
 </html>
