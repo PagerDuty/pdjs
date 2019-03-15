@@ -1,50 +1,59 @@
 <html>
 <head>
-<link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="lib/jquery-1.7.1.min.js"> </script>
-<script src="lib/moment.min.js"> </script>
-<script src="config.js"> </script>
-<script type="text/javascript" src="../js/pdjs.js"> </script>
-<script>
-var wevedonethisbefore = false
-update_incidents = function() {
-  PDJS.api({
-    res: "incidents",
-    data: {
-      sort_by:"created_on:desc",
-      limit: "20",
-      fields: "id,status,created_on,service,last_status_change_by,last_status_change_on"
-    },
-    success: function(data) {
-      console.log(data)
-      jQuery.each( data.incidents, function(index, incident){
-        i = jQuery("#"+incident.id)
-        if(i.length>0) {
-          i.addClass(incident.status)
-        } else if(incident.status!="resolved"||!wevedonethisbefore) {
-          $("#incidents").append(
-            '<div id="'+incident.id+'" class="'+incident.status+'">'+incident.id+' on '+incident.service.name+'</div>'
-          )
-        }
-        if(incident.status=="resolved") {
-          jQuery("#"+incident.id).fadeOut(PDJS.refresh_in_ms*5)
-        }
-      })
-      wevedonethisbefore = true
-      window.setTimeout(update_incidents, PDJS.refresh_in_ms)
-    }
-  })
-}
-
-$(function(){
-  PDJS = new PDJSobj(pdjs_settings)
-  update_incidents()
-})
-</script>
+  <link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
+  <script src="lib/jquery-1.7.1.min.js"> </script>
+  <script src="lib/moment.min.js"> </script>
+  <script src="config.js"> </script>
+  <script type="text/javascript" src="../js/pdjs.js"> </script>
 </head>
-
 <body>
+  <h1>Incidents</h1>
   <div id="incidents">
   </div>
 </body>
+<script>
+    var wevedonethisbefore = false;
+    var PDJS = new PDJSobj(pdjs_settings);
+  
+    update_incidents = function() {
+      PDJS.api({
+        res: "incidents",
+        data: {
+          sort_by:"created_at:desc",
+          limit: "20",
+          fields: "id,status,created_at,service,last_status_change_by,last_status_change_on"
+        },
+        success: function(data) {
+          console.log(data);
+          if (data.incidents.length > 0) {
+            data.incidents.map((incident, index) => {
+              
+              var currentElem = document.getElementById(incident.id);
+              var incidentsElem = document.getElementById("incidents");
+
+              if(currentElem) {
+                currentElem.className = incident.status;
+                if(incident.status=="resolved") {
+                  currentElem.classList.add("hide"); //.fadeOut(PDJS.refresh_in_ms*5)
+                }
+              } else if(incident.status!="resolved"||!wevedonethisbefore) {
+                var newElement = document.createElement('div');
+                newElement.id = incident.id;
+                newElement.classList.add(incident.status);
+                newElement.innerHTML = incident.title +' ('+incident.id+') on '+incident.service.summary;
+
+                incidentsElem.appendChild(newElement);
+              }
+            })
+        } else {
+          incidentsElem.appendChild('div').setInnerHTML('No incidents!');
+        }
+        wevedonethisbefore = true;
+        window.setTimeout(update_incidents, PDJS.refresh_in_ms);
+        }
+      })
+    }
+  
+    update_incidents();
+  </script>
 </html>

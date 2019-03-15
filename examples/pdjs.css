@@ -22,3 +22,6 @@ div.resolved {
   background-color: #cfc;
   border: 2px solid #080;
 }
+div.hide {
+  opacity: 0;
+}
