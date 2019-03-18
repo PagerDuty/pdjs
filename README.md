@@ -6,7 +6,6 @@ This is a simple JavaScript wrapper to the [PagerDuty API](https://v2.developer.
 ### Setup PDJSobj
 1. First, you'll need the following dependencies included in your project to utilize PDJS.
     * [pdjs.js](https://github.com/PagerDuty/pdjs)
-    * [jQuery](http://jquery.com/)
 1. Create a `PDJSobj` object, setting values for the `subdomain`, `token`, and `api_version` fields on the object.
 ```javascript
 var PDJS = new PDJSobj({
