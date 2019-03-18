@@ -2,7 +2,6 @@
 <head>
 <title>Add Contact Method For a PD User</title>
 <link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="lib/jquery-1.7.1.min.js"> </script>
 <script src="lib/moment.min.js"> </script>
 <script src="config.js"> </script>
 <script type="text/javascript" src="../js/pdjs.js"> </script>
@@ -13,7 +12,7 @@
     document.getElementById("res").append(`Adding contact method for user: ${user_id}. `);
 
     PDJS.api({
-      res: 'users/'+user_id+'/contact_methods',
+      res: `users/${user_id}/contact_methods`,
       type: 'POST',
       data: {
         contact_method: {
@@ -28,14 +27,14 @@
         add_notification_rule(user_id, data.contact_method, 900);
       },
       error: function (data) {
-        console.log(`ERROR ADDING CONTACT METHOD: ${JSON.parse(data.responseText).error.errors.join()}`);
+        console.log(`ERROR ADDING CONTACT METHOD: ${data.error.errors.join()}`);
       }
     })
   };
 
   add_notification_rule = function(user_id, contact_method, start_delay_in_minutes) {
     PDJS.api({
-      res: 'users/'+user_id+'/notification_rules',
+      res: `users/${user_id}/notification_rules`,
       type: 'POST',
       data: {
         notification_rule: {
@@ -46,10 +45,10 @@
         }
       },
       success: function (data) {
-        document.getElementById("res").append(`New contact method ID: ${data.notification_rule.id}. `);
+        document.getElementById("res").append(`New notification rule ID: ${data.notification_rule.id}. `);
       },
       error: function (data) {
-        console.log(`ERROR ADDING NOTIFICATION RULE: ${JSON.parse(data.responseText).error.errors.join()}`);
+        console.log(`ERROR ADDING NOTIFICATION RULE: ${data.error.errors.join()}`);
       }
     })
   };

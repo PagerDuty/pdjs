@@ -41,8 +41,8 @@
         error_detail = err.responseText;
         try {
           error_detail = JSON.parse(error_detail);
-        } catch (error) {
-          anyerror = error;
+        } catch (error1) {
+          anyerror = error1;
           this.logg("Not an JSON error");
         }
         return console.log(error_detail);
@@ -76,14 +76,14 @@
           params.data = JSON.stringify(params.data);
         }
         params.headers.Authorization = 'Token token=' + this.token;
-        params.error = params.error || (err) => {
+        params.error = params.error || ((err) => {
           return this.error_function(err, params);
-        };
-        params.success = params.success || (data) => {
+        });
+        params.success = params.success || ((data) => {
           return this.no_success_function(data, params);
-        };
+        });
         this.logg(params);
-        return $.ajax(params);
+        return this.sendRequest(params);
       }
 
       // For list queries, this will recursively keep getting the next offset
@@ -91,13 +91,13 @@
         params.data = params.data || {};
         params.data.limit = 100;
         params.data.offset = params.data.offset || 0;
-        params.final_success = params.final_success || (data) => {
+        params.final_success = params.final_success || ((data) => {
           return this.no_success_function(data, params);
-        };
-        params.incremental_success = params.incremental_success || (data) => {
+        });
+        params.incremental_success = params.incremental_success || ((data) => {
           return 0;
-        };
-        params.success = (data) => {
+        });
+        params.success = ((data) => {
           data.res = params.res;
           params.incremental_success(data[params.res]);
           datasofar = datasofar.concat(data[params.res]);
@@ -117,7 +117,7 @@
             this.logg(data);
             return params.final_success(data);
           }
-        };
+        });
         this.logg(params);
         return this.api(params);
       }
@@ -128,6 +128,7 @@
         params.type = "POST";
         params.url = params.url || this.protocol + "://events." + this.server + "/generic/2010-04-15/create_event.json";
         params.data = params.data || {};
+        params.headers = params.headers || {};
         params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key");
         params.data.event_type = params.data.event_type || params.event_type || "trigger";
         params.data.incident_key = params.data.incident_key || params.incident_key || "Please specify an incident_key";
@@ -143,13 +144,13 @@
         params.data = JSON.stringify(params.data);
         params.contentType = "application/json; charset=utf-8";
         params.dataType = "json";
-        params.error = params.error || (err) => {
+        params.error = params.error || ((err) => {
           return this.error_function(err, params);
-        };
-        params.success = params.success || (data) => {
+        });
+        params.success = params.success || ((data) => {
           return this.no_success_function(data, params);
-        };
-        return $.ajax(params);
+        });
+        return this.sendRequest(params);
       }
 
       // Shortcut methods
@@ -169,9 +170,39 @@
         return this.event(params);
       }
 
+      sendRequest(params = {}) {
+        var accepts, contentType, data, error, headers, query, success, type, url, xhr;
+        ({accepts, contentType, data, error, headers, success, type, url} = params);
+        xhr = new XMLHttpRequest();
+        if (type === 'GET') {
+          query = '';
+          Object.keys(data).map(function(key) {
+            if (query !== '') {
+              query += '&';
+            }
+            return query += key + '=' + encodeURIComponent(data[key]);
+          });
+          url += '?' + query;
+        }
+        xhr.open(type, url);
+        xhr.setRequestHeader('Content-Type', contentType);
+        xhr.setRequestHeader('Authorization', headers.Authorization);
+        if ((accepts != null ? accepts.json : void 0) != null) {
+          xhr.setRequestHeader('Accept', accepts.json);
+        }
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            return success(JSON.parse(xhr.responseText));
+          } else {
+            return error(JSON.parse(xhr.responseText));
+          }
+        };
+        return xhr.send(data);
+      }
+
     };
 
-    PDJSobj.version = "PDJS-1.0.0";
+    PDJSobj.version = "PDJS-1.1.0";
 
     return PDJSobj;
 
