@@ -135,7 +135,7 @@ To get an idea for how `PDJS` works, there's an examples directory:
 ## Compiling the Base Script:
 `PDJS` is written in [CoffeeScript](http://coffeescript.org/). To make changes to the library, you'll edit the `coffee/pdjsbase.coffee` file and compile it with the command below to produce the JavaScript.
 
-`coffee --output js/ --compile coffee/ `
+`coffee --output js/ --compile --watch coffee/ `
 
 ## More info
 
