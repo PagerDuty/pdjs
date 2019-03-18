@@ -2,28 +2,19 @@
 <head>
 
 <link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="lib/jquery-1.7.1.min.js"> </script>
 <script src="lib/Blob.js"> </script>
 <script src="lib/FileSaver.js"> </script>
 <script type="text/javascript" src="../js/pdjs.js"> </script>
 <script src="config.js"> </script>
 
 <script>
-  
-// $(function() {
-//   if(location.href.indexOf(",")>0) { 
-//     $("#subdomain").val(location.hash.split(",")[0].replace(/#/,""))
-//     $("#apikey").val(location.hash.split(",")[1])
-//   }
-// })
-
-userstoCSV = function() {
+var userstoCSV = function() {
   var PDJS = new PDJSobj(pdjs_settings)
   window.PDJS = PDJS
   PDJS.api_all({
     res: "users",
     data: {
-      "include":["contact_methods"]
+      "include[]":["contact_methods"]
     },
     incremental_success: function(data) {
       document.getElementById("status").append(" Loading");
@@ -37,7 +28,7 @@ userstoCSV = function() {
   })
 }
 
-datatoCSV = function(data) {
+var datatoCSV = function(data) {
   console.log(data);
   var outputToCsv = "id, name, email, phone, role, time_zone\n";
   

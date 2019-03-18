@@ -1,7 +1,6 @@
 <html>
 <head>
   <link href="pdjs.css" media="screen" rel="stylesheet" type="text/css" />
-  <script src="lib/jquery-1.7.1.min.js"> </script>
   <script src="lib/moment.min.js"> </script>
   <script src="config.js"> </script>
   <script type="text/javascript" src="../js/pdjs.js"> </script>
@@ -86,10 +85,8 @@
           str = [serviceName, services[serviceName], servicesTime[serviceName], servicesTime[serviceName]/services[serviceName]].join();
           document.getElementById("services").append(str+"\n");
         };  
+        document.getElementById("status").remove();   
       }
     });
-
-    document.getElementById("status").remove();   
-
     </script>
 </html>

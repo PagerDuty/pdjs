@@ -1,5 +1,6 @@
 var pdjs_settings = {
-  subdomain: "pdt-smcallister",
-  token: "VTj837zDuAaXqJzUuhuj",
+  subdomain: "webdemo",
+  token: "e8Ks3JRD9f2i982F5WuL",
   refresh: 15,
+  logging: true
 }

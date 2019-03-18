@@ -58,10 +58,10 @@ class window.PDJSobj
     if(params.type=="POST" || params.type=="PUT") # the update APIs expect the data in the body to be JSON
       params.data = JSON.stringify(params.data)
     params.headers.Authorization = 'Token token='+this.token
-    params.error = params.error || (err) =>
-      this.error_function(err, params)
-    params.success = params.success || (data) =>
-      this.no_success_function(data, params)
+    params.error = params.error || ((err) =>
+      this.error_function(err, params))
+    params.success = params.success || ((data) =>
+      this.no_success_function(data, params))
     this.logg(params)
     this.sendRequest(params)
 
@@ -70,11 +70,11 @@ class window.PDJSobj
     params.data = params.data || {}
     params.data.limit = 100
     params.data.offset = params.data.offset || 0
-    params.final_success = params.final_success || (data) =>
-      this.no_success_function(data, params)
-    params.incremental_success = params.incremental_success || (data) =>
-      0
-    params.success = (data) =>
+    params.final_success = params.final_success || ((data) =>
+      this.no_success_function(data, params))
+    params.incremental_success = params.incremental_success || ((data) =>
+      0)
+    params.success = ((data) =>
       data.res = params.res
       params.incremental_success(data[params.res])
       datasofar = datasofar.concat(data[params.res])
@@ -92,7 +92,7 @@ class window.PDJSobj
         data.offset = 0
         data.limit = data.total
         this.logg(data)
-        params.final_success(data)
+        params.final_success(data))
 
     this.logg(params)
     this.api(params)
@@ -104,6 +104,7 @@ class window.PDJSobj
     params.url = params.url || @protocol+"://events."+this.server+"/generic/2010-04-15/create_event.json"
 
     params.data = params.data || {}
+    params.headers = params.headers || {}
     params.data.service_key = params.data.service_key || params.service_key || this.logg("No service key")
     params.data.event_type = params.data.event_type || params.event_type || "trigger"
     params.data.incident_key = params.data.incident_key || params.incident_key || "Please specify an incident_key"
@@ -116,10 +117,10 @@ class window.PDJSobj
 
     params.contentType =  "application/json; charset=utf-8"
     params.dataType = "json"
-    params.error = params.error || (err) =>
-      this.error_function(err, params)
-    params.success = params.success || (data) =>
-      this.no_success_function(data, params)
+    params.error = params.error || ((err) =>
+      this.error_function(err, params)) 
+    params.success = params.success || ((data) =>
+      this.no_success_function(data, params))
     this.sendRequest(params)
 
   # Shortcut methods
@@ -151,14 +152,13 @@ class window.PDJSobj
     xhr.open(type, url)
     xhr.setRequestHeader('Content-Type', contentType)
     xhr.setRequestHeader('Authorization', headers.Authorization)
-
     if accepts?.json?
       xhr.setRequestHeader('Accept', accepts.json)
 
     xhr.onload = () ->
-      if xhr.status is 200
+      if xhr.status >= 200 and xhr.status < 300
           success(JSON.parse(xhr.responseText))
-      else if xhr.status isnt 200
+      else
           error(JSON.parse(xhr.responseText))
 
-    xhr.send(JSON.stringify(data))
+    xhr.send(data)
