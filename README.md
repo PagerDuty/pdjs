@@ -132,9 +132,9 @@ To get an idea for how `PDJS` works, there's an examples directory:
   * [examples/add_contact_method.html](examples/trigger.html) shows how to trigger an incident
 
 ## Compiling the Base Script:
-`PDJS` is written in [CoffeeScript](http://coffeescript.org/). To make changes to the library, you'll edit the `coffee/pdjsbase.coffee` file and compile it with the command below to produce the JavaScript.
+`PDJS` is written in [CoffeeScript](http://coffeescript.org/). To make changes to the library, you'll edit the `coffee/pdjsbase.coffee` file and compile it by running the command below from the `pdjs` directory to produce the JavaScript.
 
-`coffee --output js/ --compile --watch coffee/ `
+`coffee --output js/pdjs.js --compile --watch coffee/ `
 
 ## More info
 
