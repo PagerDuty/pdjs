@@ -1,11 +1,11 @@
-PDJS (PagerDuty base JavaScript API)
+PDJS (PagerDuty based JavaScript API)
 ====
-This is a simple JavaScript wrapper to the [PagerDuty API](https://v2.developer.pagerduty.com/v2/docs)
+This is a simple client-side JavaScript wrapper to the [PagerDuty API](https://v2.developer.pagerduty.com/v2/docs).
 
 ## Making an API request
 ### Setup PDJSobj
 1. First, you'll need the following dependencies included in your project to utilize PDJS.
-    * [pdjs.js](https://github.com/PagerDuty/pdjs)
+    * [pdjs.js](https://github.com/PagerDuty/pdjs) -- you can download it and manually add it to your project. Or, `npm i pagerduty-pdjs`.
 1. Create a `PDJSobj` object, setting values for the `subdomain`, `token`, and `api_version` fields on the object.
 ```javascript
 var PDJS = new PDJSobj({
@@ -128,8 +128,7 @@ That's kind of nifty.
 To get an idea for how `PDJS` works, there's an examples directory:
 
   * [examples/incidents.html](https://pagerduty.github.io/pdjs/examples/incidents.html) polls the [incidents](http://developer.pagerduty.com/documentation/rest/incidents/list) api and displays the triggered & acknowledged incidents
-  * [examples/report.html](https://pagerduty.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file.
-  * [examples/add_contact_method.html](examples/trigger.html) shows how to trigger an incident
+  * [examples/report.html](https://pagerduty.github.io/pdjs/examples/report.html) shows off *api_all* by looping through all the events on my webdemo account for the last 30 days and prints them out as a CSV-esque thing that you could paste into a CSV file
 
 ## Compiling the Base Script:
 `PDJS` is written in [CoffeeScript](http://coffeescript.org/). To make changes to the library, you'll edit the `coffee/pdjsbase.coffee` file and compile it by running the command below from the `pdjs` directory to produce the JavaScript.
@@ -137,6 +136,7 @@ To get an idea for how `PDJS` works, there's an examples directory:
 `coffee --output js/pdjs.js --compile --watch coffee/ `
 
 ## More info
+This project is for client-side JavaScript. If you're looking for a Node library, we recommend the [node-pagerduty](https://github.com/kmart2234/node-pagerduty) library.
 
 Are you using this library or have questions?  Let us know by posting to the [PagerDuty Community Developer Forum](https://community.pagerduty.com/c/dev).
 

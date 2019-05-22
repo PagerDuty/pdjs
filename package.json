@@ -1,7 +1,7 @@
 {
-  "name": "pdjs",
+  "name": "pagerduty-pdjs",
   "version": "1.1.0",
-  "description": "JavaScript wrapper for the PagerDuty API",
+  "description": "JavaScript wrapper for the PagerDuty API, maintained by PagerDuty",
   "main": "index.js",
   "directories": {
     "example": "examples"
@@ -16,7 +16,7 @@
   "keywords": [
     "PagerDuty"
   ],
-  "author": "Thom Blake <thethomblake@gmail.com>",
+  "author": "PagerDuty <open-source@pagerduty.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/PagerDuty/pdjs/issues"
