@@ -38,7 +38,7 @@ PDJS.api({
   * `success` -- the callback function that is called when the API call completes successfully. This is **required**.
   * `error` -- the callback function that is called when there is an error with the API call. This parameter is optional, though recommended.
 
-*In additino to specififying the endpoint, the `res` parameter may have an ID in it. For example, here's how to get the [notes](https://v2.developer.pagerduty.com/v2/page/api-reference#!/Incidents/get_incidents_id_notes) for an `incident` with the ID of `PNCII2E`.
+*In addition to specififying the endpoint, the `res` parameter may have an ID in it. For example, here's how to get the [notes](https://v2.developer.pagerduty.com/v2/page/api-reference#!/Incidents/get_incidents_id_notes) for an `incident` with the ID of `PNCII2E`.
 
 ```javascript
 PDJS.api({
