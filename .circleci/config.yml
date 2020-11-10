@@ -1,9 +1,14 @@
 version: 2.1
 
+executors:
+  base:
+    docker:
+      - image: circleci/node:14
+    working_directory: /home/circleci/pdjs
+
 jobs:
   build:
-    docker:
-      image: circleci/node@14
+    executor: base
     steps:
       - checkout
       - restore_cache:
@@ -21,8 +26,7 @@ jobs:
       - store_artifacts:
           path: dist
   lint:
-    docker:
-      image: circleci/node@14
+    executor: base
     steps:
       - checkout
       - restore_cache:
@@ -38,8 +42,7 @@ jobs:
           name: Lint
           command: npm run lint
   test:
-    docker:
-      image: circleci/node@14
+    executor: base
     steps:
       - checkout
       - restore_cache:
