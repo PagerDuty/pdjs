@@ -1,8 +1,31 @@
 version: 2.1
 orbs:
   node: circleci/node@3.0.0
+
+jobs:
+  build:
+    steps:
+      - run:
+          name: Install NPM
+          command: npm ci
+      - run:
+          name: Build packages
+          command: npm run build
+  lint:
+    steps:
+      - run:
+          name: Lint
+          command: npm run lint
+  test:
+    steps:
+      - run:
+          name: Test
+          command: npm run test
+
+
 workflows:
   node-tests:
     jobs:
-      - node/test
-      - node/build
+      - build
+      - lint
+      - test
