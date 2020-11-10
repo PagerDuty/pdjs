@@ -110,7 +110,7 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
 }
 
 function resourceKey(url: string) {
-  let resource = url.match(/.+.com\/(?<resource>[\w]+)/);
+  const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
   if (resource) {
     return resource[1];
   }
