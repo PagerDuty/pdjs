@@ -13,7 +13,7 @@ test('API calls return JSON for basic API calls with server', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .get('/incidents')
@@ -34,7 +34,7 @@ test('API calls return JSON for basic API calls with url', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .get('/incidents')
@@ -54,7 +54,7 @@ test('API calls return JSON for basic API calls with endpoint', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .get('/incidents')
@@ -74,7 +74,7 @@ test('API calls support partial application with url', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .get('/incidents')
@@ -94,7 +94,7 @@ test('API calls support partial application with convenience methods', async don
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .get('/incidents')
