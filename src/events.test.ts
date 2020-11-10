@@ -26,7 +26,7 @@ test('Events API properly passes Events V2 requests', async done => {
 
   nock('https://events.pagerduty.com', {
     reqheaders: {
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .post('/v2/enqueue')
@@ -51,7 +51,7 @@ test('Events API properly passes Change Events requests', async done => {
 
   nock('https://events.pagerduty.com', {
     reqheaders: {
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .post('/v2/change/enqueue')
@@ -75,7 +75,7 @@ test('Events API properly passes Events V2 requests with images/links/details', 
 
   nock('https://events.pagerduty.com', {
     reqheaders: {
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .post('/v2/enqueue')
@@ -123,7 +123,7 @@ test('Events API shorthands should send corresponding events', async done => {
 
   nock('https://events.pagerduty.com', {
     reqheaders: {
-      'User-Agent': header => header.startsWith('pdjs-next'),
+      'User-Agent': header => header.startsWith('pdjs'),
     },
   })
     .post('/v2/enqueue')

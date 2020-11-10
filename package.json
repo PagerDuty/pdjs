@@ -1,6 +1,6 @@
 {
-  "name": "pdjs-next",
-  "version": "0.0.1",
+  "name": "pdjs",
+  "version": "2.0.0",
   "description": "A new simple JavaScript wrapper for the PagerDuty API",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",

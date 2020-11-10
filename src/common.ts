@@ -39,7 +39,7 @@ function userAgentHeader(): object {
   if (isBrowser) return {};
 
   return {
-    'User-Agent': `pdjs-next/${VERSION} (${process.version}/${process.platform})`,
+    'User-Agent': `pdjs/${VERSION} (${process.version}/${process.platform})`,
   };
 }
 

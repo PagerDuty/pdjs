@@ -13,7 +13,7 @@ A simple JavaScript wrapper for the PagerDuty APIs.
 For the time being:
 
 ```bash
-npm install --save dobs/pdjs-next#main
+npm install --save pagerduty/pdjs#2.0
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ REST API calls can be done using the convenience methods or by passing in a `url
 #### convenience Methods
 
 ```javascript
-import {api} from 'pdjs-next';
+import {api} from 'pdjs';
 
 const pd = api({token: 'someToken1234567890'})
 
@@ -74,7 +74,7 @@ There's an async `all` that attempts to fetch all pages for a given endpoint and
 Note that the PagerDuty API has a limit of 10,000 for most endpoints and recommends using parameters to refine searches where more results are necessary. More information can be found in the [Developer Documentation.](https://developer.pagerduty.com/docs/rest-api-v2/pagination/)
 
 ```javascript
-import {all} from 'pdjs-next';
+import {all} from 'pdjs';
 
 // List every API-accessible incident.
 const responses = await all({
@@ -93,7 +93,7 @@ for (response of responses) {
 Both V1 and V2 of the Events API are supported, with the version to used being based on the payload. For example, the Events API V2:
 
 ```javascript
-import {event} from 'pdjs-next';
+import {event} from 'pdjs';
 
 event({
   data: {
@@ -115,8 +115,8 @@ event({
 
 Two browser-ready scripts are provided:
 
-- [dist/pdjs.js](https://raw.githubusercontent.com/dobs/pdjs-next/main/dist/pdjs.js): For browsers supporting `fetch`.
-- [dist/pdjs-legacy.js](https://raw.githubusercontent.com/dobs/pdjs-next/main/dist/pdjs-legacy.js): For older browsers requiring a `fetch` polyfill -- mostly IE 11.
+- [dist/pdjs.js](https://raw.githubusercontent.com/PagerDuty/pdjs/2.0/dist/pdjs.js): For browsers supporting `fetch`.
+- [dist/pdjs-legacy.js](https://raw.githubusercontent.com/PagerDuty/pdjs/2.0/dist/pdjs-legacy.js): For older browsers requiring a `fetch` polyfill -- mostly IE 11.
 
 Either of these files can be used by copying them into your project and including them directly, with all functions namespaced `PagerDuty`:
 
