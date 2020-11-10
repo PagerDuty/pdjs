@@ -86,7 +86,9 @@ function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
     return Promise.resolve(responses);
   }
 
-  return response.next().then(response => allInner(responses.concat([response])));
+  return response
+    .next()
+    .then(response => allInner(responses.concat([response])));
 }
 
 function apiRequest(url: string, options: RequestOptions): APIPromise {
@@ -134,18 +136,22 @@ interface CursorPagination {
   limit?: number;
 }
 
-function isOffsetPagination(data: OffsetPagination | CursorPagination): data is OffsetPagination {
+function isOffsetPagination(
+  data: OffsetPagination | CursorPagination
+): data is OffsetPagination {
   if ((data as OffsetPagination).offset !== undefined) {
-    return true
+    return true;
   }
-  return false
+  return false;
 }
 
-function isCursorPagination(data: OffsetPagination | CursorPagination): data is CursorPagination {
+function isCursorPagination(
+  data: OffsetPagination | CursorPagination
+): data is CursorPagination {
   if ((data as CursorPagination).cursor !== undefined) {
-    return true
+    return true;
   }
-  return false
+  return false;
 }
 
 function nextFunc(
@@ -174,8 +180,8 @@ function nextFunc(
             ...options.params,
             cursor: data.cursor!,
             limit: data.limit!.toString(),
-          }
-        })
+          },
+        });
     }
   }
 

@@ -39,7 +39,6 @@ test('Events API properly passes Events V2 requests', async done => {
   done();
 });
 
-
 test('Events API properly passes Change Events requests', async done => {
   const body = {
     data: {

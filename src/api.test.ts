@@ -22,8 +22,8 @@ test('API calls return JSON for basic API calls with server', async done => {
   const resp = await api({
     token: 'someToken1234567890',
     server: 'api.pagerduty.com',
-    endpoint: 'incidents'
-  })
+    endpoint: 'incidents',
+  });
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
@@ -138,14 +138,13 @@ test('API calls populate resource field', async done => {
 
   const resp = await api({
     token: 'someToken1234567890',
-    endpoint: '/incidents'
+    endpoint: '/incidents',
   });
   expect(resp.resource).toEqual(['one', 1, null]);
   done();
 });
 
 test('API `all` calls for offset should generate requests until no more results', async done => {
-
   const body = {
     incidents: [],
     limit: 1,
@@ -204,7 +203,7 @@ test('API `all` calls for cursor should generate requests until no more results'
     .get('/incidents?limit=1&cursor=two')
     .reply(200, {
       ...body,
-      cursor: null
+      cursor: null,
     });
 
   const responses = await all({

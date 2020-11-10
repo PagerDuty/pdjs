@@ -61,21 +61,23 @@ export interface ChangeParams extends RequestOptions {
 }
 
 export function event(params: EventParams): EventPromise {
-  const {server = 'events.pagerduty.com', type = 'event', data, ...config} = params;
+  const {
+    server = 'events.pagerduty.com',
+    type = 'event',
+    data,
+    ...config
+  } = params;
 
-  let url = `https://${server}/v2/enqueue`
+  let url = `https://${server}/v2/enqueue`;
   if (type === 'change') {
-    url = `https://${server}/v2/change/enqueue`
+    url = `https://${server}/v2/change/enqueue`;
   }
 
-  return eventFetch(
-    url,
-    {
-      method: 'POST',
-      body: JSON.stringify(data),
-      ...config,
-    }
-  );
+  return eventFetch(url, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    ...config,
+  });
 }
 
 const shorthand = (action: Action) => (params: EventParams): EventPromise => {
@@ -93,7 +95,8 @@ const shorthand = (action: Action) => (params: EventParams): EventPromise => {
 export const trigger = shorthand('trigger');
 export const acknowledge = shorthand('acknowledge');
 export const resolve = shorthand('resolve');
-export const change = (params: EventParams) => event({...params, type: 'change'});
+export const change = (params: EventParams) =>
+  event({...params, type: 'change'});
 
 async function eventFetch(url: string, options: RequestOptions): EventPromise {
   const resp = (await request(url, options)) as EventResponse;
