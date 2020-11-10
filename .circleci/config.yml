@@ -11,6 +11,8 @@ jobs:
       - run:
           name: Build packages
           command: npm run build
+      - store_artifacts:
+          path: dist
   lint:
     steps:
       - run:
