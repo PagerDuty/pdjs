@@ -4,6 +4,7 @@ orbs:
 
 jobs:
   build:
+    executor: node
     steps:
       - run:
           name: Install NPM
@@ -14,11 +15,13 @@ jobs:
       - store_artifacts:
           path: dist
   lint:
+    executor: node
     steps:
       - run:
           name: Lint
           command: npm run lint
   test:
+    executor: node
     steps:
       - run:
           name: Test
@@ -26,7 +29,7 @@ jobs:
 
 
 workflows:
-  node-tests:
+  build-and-test:
     jobs:
       - build
       - lint
