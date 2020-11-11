@@ -22,7 +22,7 @@ npm install --save pagerduty/pdjs#2.0
 
 REST API calls can be done using the convenience methods or by passing in a `url` or `endpoint`.
 
-#### convenience Methods
+#### Convenience Methods
 
 ```javascript
 import {api} from 'pdjs';

@@ -6,6 +6,7 @@ export type EventPromise = Promise<EventResponse>;
 
 export interface EventResponse extends Response {
   data: any;
+  response: Response;
 }
 
 export type Severity = 'critical' | 'error' | 'warning' | 'info';
@@ -98,9 +99,17 @@ export const resolve = shorthand('resolve');
 export const change = (params: EventParams) =>
   event({...params, type: 'change'});
 
-async function eventFetch(url: string, options: RequestOptions): EventPromise {
-  const resp = (await request(url, options)) as EventResponse;
-  resp.data = await resp.json();
-  // TODO: Something with the return data data.
-  return resp;
+function eventFetch(url: string, options: RequestOptions): EventPromise {
+  return request(url, options).then(
+    (response: Response): EventPromise => {
+      const apiResponse = response as EventResponse;
+      return response.json().then(
+        (data): EventResponse => {
+          apiResponse.data = data;
+          apiResponse.response = response;
+          return apiResponse;
+        }
+      );
+    }
+  );
 }
