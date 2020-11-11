@@ -24,6 +24,8 @@ REST API calls can be done using the convenience methods or by passing in a `url
 
 #### Convenience Methods
 
+There are some simply convience methods. `get()`, `post()`, `put()`, and `delete()`.
+
 ```javascript
 import {api} from 'pdjs';
 
@@ -67,7 +69,66 @@ pd.get('/incidents')
 
 ```
 
-#### Pagination
+### Events API
+
+Events V2 is supported along with Change Events.
+
+```javascript
+import {event} from 'pdjs';
+
+event({
+  data: {
+    routing_key: 'YOUR_ROUTING_KEY',
+    event_action: 'trigger',
+    dedup_key: 'test_incident_2_88f520',
+    payload: {
+      summary: 'Test Event V2',
+      source: 'test-source',
+      severity: 'error',
+    },
+  },
+})
+  .then(console.log)
+  .catch(console.error);
+```
+
+#### Convenience Methods
+
+```javascript
+import {change, trigger, acknowledge, resolve} from 'pdjs';
+
+change({
+    "routing_key": "YOUR_ROUTING_KEY",
+    "payload": {
+      "summary": "Build Success:!",
+      "timestamp": "2015-07-17T08:42:58.315+0000",
+      "source": "prod-build-agent",
+      "custom_details": {
+        "build_state": "passed",
+        "build_number": "220",
+        "run_time": "1337s"
+      }
+    },
+    "links": [{
+      "href": "https://buildpipeline.com",
+      "text": "View in Build Pipeline"
+    }]
+})
+  .then(console.log)
+  .catch(console.error);
+
+trigger({...})
+  .then(console.log)
+  .catch(console.error);
+acknowledge({...})
+  .then(console.log)
+  .catch(console.error);
+resolve({...})
+  .then(console.log)
+  .catch(console.error);
+```
+
+### Pagination
 
 There's an async `all` that attempts to fetch all pages for a given endpoint and set of parameters. For convenience this function supports both offset and cursor based pagination.
 
@@ -88,28 +149,9 @@ for (response of responses) {
 }
 ```
 
-### Events API
+### Retries
 
-Both V1 and V2 of the Events API are supported, with the version to used being based on the payload. For example, the Events API V2:
-
-```javascript
-import {event} from 'pdjs';
-
-event({
-  data: {
-    routing_key: '791695b5cdea40bfa2a710673888f520',
-    event_action: 'trigger',
-    dedup_key: 'test_incident_2_88f520',
-    payload: {
-      summary: 'Test Event V2',
-      source: 'test-source',
-      severity: 'error',
-    },
-  },
-})
-  .then(console.log)
-  .catch(console.error);
-```
+There is some very simple retry logic baked into each request in the case that the PagerDuty API rate limits your requests (only when it responds HTTP Code 429). Requests will retry 3 times waiting 20 seconds between each request. If the request is still being rate limited after 3 attemps the client will simply return the 429 response.
 
 ### Browser
 
