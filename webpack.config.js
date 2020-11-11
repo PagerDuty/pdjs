@@ -44,8 +44,8 @@ module.exports = [
             {
               loader: 'webpack-strip-block',
               options: {
-                start: 'NODE-ONLY-START',
-                end: 'NODE-ONLY-END',
+                start: 'LEGACY-BROWSER-SUPPORT-START',
+                end: 'LEGACY-BROWSER-SUPPORT-END',
               },
             },
           ],

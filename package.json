@@ -38,6 +38,7 @@
     "webpack-strip-block": "^0.3.0"
   },
   "dependencies": {
+    "abortcontroller-polyfill": "^1.5.0",
     "browser-or-node": "^1.3.0",
     "cross-fetch": "^3.0.6"
   },

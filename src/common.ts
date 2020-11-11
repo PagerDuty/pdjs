@@ -1,38 +1,76 @@
-/* NODE-ONLY-START */
+/* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-import {isBrowser} from 'browser-or-node';
-/* NODE-ONLY-END */
 
-const VERSION = '0.0.1';
+// TODO: Proper type support for abortcontroller-polyfill
+// @ts-ignore
+import { AbortController } from 'abortcontroller-polyfill/dist/cjs-ponyfill';
+import {isBrowser} from 'browser-or-node';
+/* LEGACY-BROWSER-SUPPORT-END */
+
+const VERSION = '2.0.0';
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string>;
+  retryCount?: number;
+  requestTimeout?: number;
+  retryTimeout?: number;
   timeout?: number;
 }
 
-// TODO: Retries.
-// TODO: Backoff.
 export function request(
   url: string | URL,
   options: RequestOptions = {}
 ): Promise<Response> {
-  const {params, timeout, ...rest} = options;
+  const {
+    params,
+    requestTimeout = 30000,
+    retryCount = 0,
+    ...rest
+  } = options;
+
 
   url = new URL(url.toString());
 
   url = applyParams(url, params);
-  options = applyTimeout(options, timeout);
+  options = applyTimeout(options, requestTimeout);
 
-  return fetch(url.toString(), {
-    ...rest,
-    headers: new Headers({
-      'Content-Type': 'application/json; charset=utf-8',
-      /* NODE-ONLY-START */
-      ...userAgentHeader(),
-      /* NODE-ONLY-END */
-      ...rest.headers,
-    }),
+  return fetch_retry(
+    url.toString(),
+    3,
+    {
+      ...rest,
+      headers: new Headers({
+        'Content-Type': 'application/json; charset=utf-8',
+        /* LEGACY-BROWSER-SUPPORT-START */
+        ...userAgentHeader(),
+        /* LEGACY-BROWSER-SUPPORT-END */
+        ...rest.headers,
+      }),
+    }
+  );
+}
+
+function fetch_retry(url: string, retries: number, options: any): Promise<Response>{
+  return new Promise(function(resolve, reject) {
+    fetch(url, options)
+      .then((response) => {
+        // We don't want to `reject` when retries have finished
+        // Instead simply stop trying and return.
+        if (retries === 0) return resolve(response);
+        if (response.status === 429) {
+          const {retryTimeout} = options;
+          retryTimeoutPromise(retryTimeout).then(() => {
+            fetch_retry(url, retries - 1, options).then(resolve).catch(reject);
+          });
+        } else {
+          resolve(response);
+        }
+      })
   });
+}
+
+const retryTimeoutPromise = (milliseconds: number) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 function userAgentHeader(): object {
