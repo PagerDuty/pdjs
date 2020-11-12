@@ -1,0 +1,38 @@
+<!--
+How to use pdjs in the browser.
+
+This example will list users contact info.
+-->
+
+<html>
+  <head>
+    <!-- pdjs-legacy for legacy browser support such as IE11. -->
+    <!-- <script src="https://github.com/PagerDuty/pdjs/releases/download/2.0-alpha/pdjs-legacy.js"></script> -->
+    <script src="https://github.com/PagerDuty/pdjs/releases/download/2.0-alpha/pdjs.js"></script>
+    <script>
+      // This token is a test read-only token.
+      const pd = PagerDuty.api({token: 'y_NbAkKc66ryYTWUXYEu'});
+      const openIncidents = pd.get('/users',
+        {
+          params: {
+            'include[]': 'contact_methods'
+          }
+        }
+      )
+        .then(({resource}) => {
+          // The Users are returned in the `resource` key.
+          resource.forEach((user, index) => {
+            // Get the user data and append it to our DOM.
+            let newUser = document.createElement('li');
+            let text = document.createTextNode(`${user['name']}: ${user['email']}`)
+            newUser.appendChild(text);
+            document.getElementById('listOfUsers').appendChild(newUser);
+          })
+        })
+        .catch(console.error);
+    </script>
+  </head>
+  <body>
+    <ul id="listOfUsers"></ul>
+  </body>
+</html>
