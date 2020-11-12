@@ -5,7 +5,7 @@ export type Action = 'trigger' | 'acknowledge' | 'resolve';
 export type EventPromise = Promise<EventResponse>;
 
 export interface EventResponse extends Response {
-  data: object;
+  data: any;
   response: Response;
 }
 
