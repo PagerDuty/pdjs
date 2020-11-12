@@ -1,27 +1,28 @@
 import {request, RequestOptions} from './common';
 
 export interface ShorthandCall {
-  (res: string, params?: Partial<APIParams>): APIPromise;
+  (res: string, apiParameters?: Partial<APIParameters>): APIPromise;
 }
 
 export interface PartialCall {
-  (params: APIParams): APIPromise;
-  (params: Partial<APIParams>): PartialCall;
+  (apiParameters: APIParameters): APIPromise;
+  (apiParameters: Partial<APIParameters>): PartialCall;
   get: ShorthandCall;
   post: ShorthandCall;
   put: ShorthandCall;
   patch: ShorthandCall;
   delete: ShorthandCall;
-  all: (params: APIParams) => Promise<APIResponse[]>;
+  all: (apiParameters: APIParameters) => Promise<APIResponse[]>;
 }
 
-export type APIParams = RequestOptions & {
+export type APIParameters = RequestOptions & {
   endpoint?: string;
   url?: string;
   data?: object;
   token?: string;
   server?: string;
   version?: number;
+  queryParameters?: any;
 } & ({endpoint: string} | {url: string});
 
 export type APIPromise = Promise<APIResponse>;
@@ -33,13 +34,13 @@ export interface APIResponse extends Response {
   next?: () => APIPromise;
 }
 
-export function api(params: APIParams): APIPromise;
-export function api(params: Partial<APIParams>): PartialCall;
-export function api(params: Partial<APIParams>): APIPromise | PartialCall {
-  // If the params don't include `endpoint` treat it as a partial
+export function api(apiParameters: APIParameters): APIPromise;
+export function api(apiParameters: Partial<APIParameters>): PartialCall;
+export function api(apiParameters: Partial<APIParameters>): APIPromise | PartialCall {
+  // If the apiParameters don't include `endpoint` treat it as a partial
   // application.
-  if (!params.endpoint && !params.url) {
-    return partialCall(params);
+  if (!apiParameters.endpoint && !apiParameters.url) {
+    return partialCall(apiParameters);
   }
 
   const {
@@ -50,7 +51,7 @@ export function api(params: Partial<APIParams>): APIPromise | PartialCall {
     version = 2,
     data,
     ...rest
-  } = params;
+  } = apiParameters;
 
   const config: RequestOptions = {
     method: 'GET',
@@ -62,9 +63,9 @@ export function api(params: Partial<APIParams>): APIPromise | PartialCall {
     },
   };
 
-  // Allow `data` for `params` for requests without bodies.
+  // Allow `data` for `queryParameters` for requests without bodies.
   if (isReadonlyRequest(config.method!) && data) {
-    config.params = config.params ?? (data as Record<string, string>);
+    config.queryParameters = config.queryParameters ?? (data as Record<string, string>);
   } else {
     config.body = JSON.stringify(data);
   }
@@ -75,8 +76,8 @@ export function api(params: Partial<APIParams>): APIPromise | PartialCall {
   );
 }
 
-export function all(params: APIParams): Promise<APIResponse[]> {
-  return (api(params) as APIPromise).then(response => allInner([response]));
+export function all(apiParameters: APIParameters): Promise<APIResponse[]> {
+  return (api(apiParameters) as APIPromise).then(response => allInner([response]));
 }
 
 function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
@@ -164,8 +165,8 @@ function nextFunc(
       return () =>
         apiRequest(url, {
           ...options,
-          params: {
-            ...options.params,
+          queryParameters: {
+            ...options.queryParameters,
             limit: data.limit!.toString(),
             offset: (data.limit! + data.offset!).toString(),
           },
@@ -176,8 +177,8 @@ function nextFunc(
       return () =>
         apiRequest(url, {
           ...options,
-          params: {
-            ...options.params,
+          queryParameters: {
+            ...options.queryParameters,
             cursor: data.cursor!,
             limit: data.limit!.toString(),
           },
@@ -188,16 +189,16 @@ function nextFunc(
   return undefined;
 }
 
-function partialCall(params: Partial<APIParams>) {
-  const partialParams = params;
-  const partial = ((params: Partial<APIParams>) =>
-    api({...partialParams, ...params})) as PartialCall;
+function partialCall(apiParameters: Partial<APIParameters>) {
+  const partialParameters = apiParameters;
+  const partial = ((apiParameters: Partial<APIParameters>) =>
+    api({...partialParameters, ...apiParameters})) as PartialCall;
 
   const shorthand = (method: string) => (
     endpoint: string,
-    params?: Partial<APIParams>
+    apiParameters?: Partial<APIParameters>
   ): APIPromise =>
-    api({endpoint, method, ...partialParams, ...params}) as APIPromise;
+    api({endpoint, method, ...partialParameters, ...apiParameters}) as APIPromise;
 
   partial.get = shorthand('get');
   partial.post = shorthand('post');
@@ -205,7 +206,7 @@ function partialCall(params: Partial<APIParams>) {
   partial.patch = shorthand('patch');
   partial.delete = shorthand('delete');
 
-  partial.all = (params: APIParams) => all(params);
+  partial.all = (apiParameters: APIParameters) => all(apiParameters);
 
   return partial;
 }

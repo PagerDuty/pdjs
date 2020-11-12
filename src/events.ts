@@ -40,7 +40,7 @@ export interface EventPayloadV2 {
   links?: Array<Link>;
 }
 
-export interface EventParams extends RequestOptions {
+export interface EventParameters extends RequestOptions {
   data: EventPayloadV2;
   type?: string;
   server?: string;
@@ -56,18 +56,18 @@ export interface ChangePayload {
   };
   links: Array<Link>;
 }
-export interface ChangeParams extends RequestOptions {
+export interface ChangeParameters extends RequestOptions {
   data: ChangePayload;
   server?: string;
 }
 
-export function event(params: EventParams): EventPromise {
+export function event(eventParameters: EventParameters): EventPromise {
   const {
     server = 'events.pagerduty.com',
     type = 'event',
     data,
     ...config
-  } = params;
+  } = eventParameters;
 
   let url = `https://${server}/v2/enqueue`;
   if (type === 'change') {
@@ -81,13 +81,13 @@ export function event(params: EventParams): EventPromise {
   });
 }
 
-const shorthand = (action: Action) => (params: EventParams): EventPromise => {
+const shorthand = (action: Action) => (eventParameters: EventParameters): EventPromise => {
   const typeField = 'event_action';
 
   return event({
-    ...params,
+    ...eventParameters,
     data: {
-      ...params.data,
+      ...eventParameters.data,
       [typeField]: action,
     },
   });
@@ -96,8 +96,8 @@ const shorthand = (action: Action) => (params: EventParams): EventPromise => {
 export const trigger = shorthand('trigger');
 export const acknowledge = shorthand('acknowledge');
 export const resolve = shorthand('resolve');
-export const change = (params: EventParams) =>
-  event({...params, type: 'change'});
+export const change = (eventParameters: EventParameters) =>
+  event({...eventParameters, type: 'change'});
 
 function eventFetch(url: string, options: RequestOptions): EventPromise {
   return request(url, options).then(

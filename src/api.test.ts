@@ -107,7 +107,7 @@ test('API calls support partial application with convenience methods', async don
   done();
 });
 
-test('API calls use data in place of params when provided on GET requests', async done => {
+test('API calls use data in place of queryParameters when provided on GET requests', async done => {
   nock('https://api.pagerduty.com')
     .get('/incidents?sort_by=created_at&total=true')
     .reply(200, EMPTY_BODY);
@@ -141,6 +141,28 @@ test('API calls populate resource field', async done => {
     endpoint: '/incidents',
   });
   expect(resp.resource).toEqual(['one', 1, null]);
+  done();
+});
+
+test('API explodes list based parameters properly', async done => {
+  nock('https://api.pagerduty.com')
+    .get('/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three')
+    .reply(200, {
+      incidents: ['one', 1, null],
+      limit: 25,
+      offset: 0,
+      total: null,
+      more: false,
+    });
+
+  const resp = await api({
+    token: 'someToken1234567890',
+    endpoint: '/incidents',
+    queryParameters: {
+      'additional_fields[]': ['one', 'two', 'three']
+    }
+  });
+  expect(resp.url).toEqual('https://api.pagerduty.com/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three');
   done();
 });
 

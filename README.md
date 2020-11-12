@@ -3,17 +3,15 @@
 A simple JavaScript wrapper for the PagerDuty APIs.
 
  - Supports Node and Browser environments
- - Supports REST, Events v1, Events v2 APIs.
+ - Supports REST and Events v2 APIs.
  - Supports both offset and cursor based pagination
+
+For full [API Reference see this page.](https://developer.pagerduty.com/api-reference)
 
 ## Installation
 
-**Note:** Proper NPM support still TODO.
-
-For the time being:
-
 ```bash
-npm install --save pagerduty/pdjs#2.0
+npm install --save @pagerduty/pdjs
 ```
 
 ## Usage
@@ -165,7 +163,7 @@ Either of these files can be used by copying them into your project and includin
 ```html
 <script src="pdjs.js"></script>
 <script>
-  PagerDuty.api({token: 'someToken1234567890', res: '/incidents'})
+  PagerDuty.api({token: 'someToken1234567890', endpoint: '/incidents'})
     .then(response => console.log(response.data))
     .catch(console.error);
 </script>

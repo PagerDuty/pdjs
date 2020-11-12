@@ -6,8 +6,10 @@ import {isBrowser} from 'browser-or-node';
 
 const VERSION = '2.0.0';
 
+type QueryParameter = Record<string, string | Array<string>>;
+
 export interface RequestOptions extends RequestInit {
-  params?: Record<string, string>;
+  queryParameters?: QueryParameter;
   retryCount?: number;
   requestTimeout?: number;
   retryTimeout?: number;
@@ -18,11 +20,11 @@ export function request(
   url: string | URL,
   options: RequestOptions = {}
 ): Promise<Response> {
-  const {params, requestTimeout = 30000, ...rest} = options;
+  const {queryParameters, requestTimeout = 30000, ...rest} = options;
 
   url = new URL(url.toString());
 
-  url = applyParams(url, params);
+  url = applyParameters(url, queryParameters);
   options = applyTimeout(options, requestTimeout);
 
   return fetch_retry(url.toString(), 3, {
@@ -73,16 +75,24 @@ function userAgentHeader(): object {
   };
 }
 
-function applyParams(url: URL, params?: Record<string, string>): URL {
-  if (!params) return url;
+function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
+  if (!queryParameters) return url;
 
-  const combinedParams = url.searchParams;
+  const combinedParameters = url.searchParams;
 
-  for (const key of Object.keys(params)) {
-    combinedParams.append(key, params[key]);
+  for (const key of Object.keys(queryParameters)) {
+    let parameter = queryParameters[key];
+    if (typeof parameter === 'string') {
+      combinedParameters.append(key, parameter);
+    } else {
+      // Support for array based keys like `additional_fields[]`
+      parameter.forEach((item) => {
+        combinedParameters.append(key, item);
+      })
+    }
   }
 
-  url.search = combinedParams.toString();
+  url.search = combinedParameters.toString();
   return url;
 }
 
