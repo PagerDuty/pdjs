@@ -32,10 +32,10 @@ test('Events API properly passes Events V2 requests', async done => {
     .post('/v2/enqueue')
     .reply(200, body);
 
-  const resp = await event(eventPayloadV2);
+  const response = await event(eventPayloadV2);
 
-  expect(resp.url).toEqual('https://events.pagerduty.com/v2/enqueue');
-  expect(resp.data).toEqual(body);
+  expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
+  expect(response.data).toEqual(body);
   done();
 });
 
@@ -56,10 +56,12 @@ test('Events API properly passes Change Events requests', async done => {
     .post('/v2/change/enqueue')
     .reply(200, body);
 
-  const resp = await change(eventPayloadV2);
+  const response = await change(eventPayloadV2);
 
-  expect(resp.url).toEqual('https://events.pagerduty.com/v2/change/enqueue');
-  expect(resp.data).toEqual(body);
+  expect(response.url).toEqual(
+    'https://events.pagerduty.com/v2/change/enqueue'
+  );
+  expect(response.data).toEqual(body);
   done();
 });
 
@@ -80,7 +82,7 @@ test('Events API properly passes Events V2 requests with images/links/details', 
     .post('/v2/enqueue')
     .reply(200, body);
 
-  const resp = await event({
+  const response = await event({
     data: {
       routing_key: 'someRoutingKeybfa2a710673888f520',
       event_action: 'trigger',
@@ -106,8 +108,8 @@ test('Events API properly passes Events V2 requests with images/links/details', 
     },
   });
 
-  expect(resp.url).toEqual('https://events.pagerduty.com/v2/enqueue');
-  expect(resp.data).toEqual(body);
+  expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
+  expect(response.data).toEqual(body);
   done();
 });
 
@@ -126,11 +128,25 @@ test('Events API shorthands should send corresponding events', async done => {
     },
   })
     .post('/v2/enqueue')
+    .reply(200, body)
+    .post('/v2/enqueue')
+    .reply(200, body)
+    .post('/v2/enqueue')
     .reply(200, body);
 
-  const resp = await acknowledge(eventPayloadV2);
+  let response = await acknowledge(eventPayloadV2);
 
-  expect(resp.url).toEqual('https://events.pagerduty.com/v2/enqueue');
-  expect(resp.data).toEqual(body);
+  expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
+  expect(response.data).toEqual(body);
+
+  response = await resolve(eventPayloadV2);
+
+  expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
+  expect(response.data).toEqual(body);
+
+  response = await trigger(eventPayloadV2);
+
+  expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
+  expect(response.data).toEqual(body);
   done();
 });

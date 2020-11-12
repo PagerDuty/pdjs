@@ -27,8 +27,8 @@ export type APIParams = RequestOptions & {
 export type APIPromise = Promise<APIResponse>;
 
 export interface APIResponse extends Response {
-  data: any;
-  resource: any;
+  data: object;
+  resource: object;
   response: Response;
   next?: () => APIPromise;
 }

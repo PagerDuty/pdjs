@@ -1,13 +1,5 @@
 import nock = require('nock');
-import {all, api} from './index';
-
-const EMPTY_BODY = {
-  incidents: [],
-  limit: 25,
-  offset: 0,
-  total: null,
-  more: false,
-};
+import {api} from './index';
 
 test('API request should return after 3 rate limited requests', async done => {
   const body = {
@@ -26,9 +18,13 @@ test('API request should return after 3 rate limited requests', async done => {
     .get('/incidents')
     .reply(429, body)
     .get('/incidents')
-    .reply(429, body)
+    .reply(429, body);
 
-  const response = await api({token: 'someToken1234567890', endpoint: '/incidents', retryTimeout: 20});
+  const response = await api({
+    token: 'someToken1234567890',
+    endpoint: '/incidents',
+    retryTimeout: 20,
+  });
 
   expect(response.response.status).toEqual(429);
   done();
@@ -49,7 +45,11 @@ test('API should return data after getting rate limited once.', async done => {
     .get('/incidents')
     .reply(200, body);
 
-  const response = await api({token: 'someToken1234567890', endpoint: '/incidents', retryTimeout: 20});
+  const response = await api({
+    token: 'someToken1234567890',
+    endpoint: '/incidents',
+    retryTimeout: 20,
+  });
 
   expect(response.response.status).toEqual(200);
   expect(response.data).toEqual(body);
