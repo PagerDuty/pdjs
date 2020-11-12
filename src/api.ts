@@ -22,7 +22,6 @@ export type APIParameters = RequestOptions & {
   token?: string;
   server?: string;
   version?: number;
-  queryParameters?: any;
 } & ({endpoint: string} | {url: string});
 
 export type APIPromise = Promise<APIResponse>;
@@ -196,9 +195,9 @@ function partialCall(apiParameters: Partial<APIParameters>) {
 
   const shorthand = (method: string) => (
     endpoint: string,
-    apiParameters?: Partial<APIParameters>
+    shorthandParameters?: Partial<APIParameters>
   ): APIPromise =>
-    api({endpoint, method, ...partialParameters, ...apiParameters}) as APIPromise;
+    api({endpoint, method, ...partialParameters, ...shorthandParameters}) as APIPromise;
 
   partial.get = shorthand('get');
   partial.post = shorthand('post');

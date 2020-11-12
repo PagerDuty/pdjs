@@ -162,7 +162,7 @@ test('API explodes list based parameters properly', async done => {
       'additional_fields[]': ['one', 'two', 'three']
     }
   });
-  expect(resp.url).toEqual('https://api.pagerduty.com/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three');
+  expect(resp.url).toEqual('https://api.pagerduty.com/incidents?additional_fields%5B%5D=one&additional_fields%5B%5D=two&additional_fields%5B%5D=three');
   done();
 });
 
