@@ -81,13 +81,12 @@ function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
   const combinedParameters = url.searchParams;
 
   for (const key of Object.keys(queryParameters)) {
-    let parameter = queryParameters[key];
+    const parameter = queryParameters[key];
     if (Array.isArray(parameter)) {
       // Support for array based keys like `additional_fields[]`
-      console.log(parameter);
-      parameter.forEach((item) => {
+      parameter.forEach(item => {
         combinedParameters.append(key, item);
-      })
+      });
     } else {
       combinedParameters.append(key, parameter);
     }

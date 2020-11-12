@@ -81,7 +81,9 @@ export function event(eventParameters: EventParameters): EventPromise {
   });
 }
 
-const shorthand = (action: Action) => (eventParameters: EventParameters): EventPromise => {
+const shorthand = (action: Action) => (
+  eventParameters: EventParameters
+): EventPromise => {
   const typeField = 'event_action';
 
   return event({

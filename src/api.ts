@@ -35,7 +35,9 @@ export interface APIResponse extends Response {
 
 export function api(apiParameters: APIParameters): APIPromise;
 export function api(apiParameters: Partial<APIParameters>): PartialCall;
-export function api(apiParameters: Partial<APIParameters>): APIPromise | PartialCall {
+export function api(
+  apiParameters: Partial<APIParameters>
+): APIPromise | PartialCall {
   // If the apiParameters don't include `endpoint` treat it as a partial
   // application.
   if (!apiParameters.endpoint && !apiParameters.url) {
@@ -64,7 +66,8 @@ export function api(apiParameters: Partial<APIParameters>): APIPromise | Partial
 
   // Allow `data` for `queryParameters` for requests without bodies.
   if (isReadonlyRequest(config.method!) && data) {
-    config.queryParameters = config.queryParameters ?? (data as Record<string, string>);
+    config.queryParameters =
+      config.queryParameters ?? (data as Record<string, string>);
   } else {
     config.body = JSON.stringify(data);
   }
@@ -76,7 +79,9 @@ export function api(apiParameters: Partial<APIParameters>): APIPromise | Partial
 }
 
 export function all(apiParameters: APIParameters): Promise<APIResponse[]> {
-  return (api(apiParameters) as APIPromise).then(response => allInner([response]));
+  return (api(apiParameters) as APIPromise).then(response =>
+    allInner([response])
+  );
 }
 
 function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
@@ -197,7 +202,12 @@ function partialCall(apiParameters: Partial<APIParameters>) {
     endpoint: string,
     shorthandParameters?: Partial<APIParameters>
   ): APIPromise =>
-    api({endpoint, method, ...partialParameters, ...shorthandParameters}) as APIPromise;
+    api({
+      endpoint,
+      method,
+      ...partialParameters,
+      ...shorthandParameters,
+    }) as APIPromise;
 
   partial.get = shorthand('get');
   partial.post = shorthand('post');

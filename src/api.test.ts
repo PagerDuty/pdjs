@@ -146,7 +146,9 @@ test('API calls populate resource field', async done => {
 
 test('API explodes list based parameters properly', async done => {
   nock('https://api.pagerduty.com')
-    .get('/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three')
+    .get(
+      '/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three'
+    )
     .reply(200, {
       incidents: ['one', 1, null],
       limit: 25,
@@ -159,10 +161,13 @@ test('API explodes list based parameters properly', async done => {
     token: 'someToken1234567890',
     endpoint: '/incidents',
     queryParameters: {
-      'additional_fields[]': ['one', 'two', 'three']
-    }
+      'additional_fields[]': ['one', 'two', 'three'],
+    },
   });
-  expect(resp.url).toEqual('https://api.pagerduty.com/incidents?additional_fields%5B%5D=one&additional_fields%5B%5D=two&additional_fields%5B%5D=three');
+
+  expect(resp.url).toEqual(
+    `https://api.pagerduty.com/incidents?additional_fields%5B%5D=one&additional_fields%5B%5D=two&additional_fields%5B%5D=three`
+  );
   done();
 });
 
