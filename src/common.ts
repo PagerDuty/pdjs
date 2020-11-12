@@ -1,9 +1,6 @@
 /* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-
-// TODO: Proper type support for abortcontroller-polyfill
-// @ts-ignore
-import {AbortController} from 'abortcontroller-polyfill/dist/cjs-ponyfill';
+import {AbortController} from 'abortcontroller-polyfill';
 import {isBrowser} from 'browser-or-node';
 /* LEGACY-BROWSER-SUPPORT-END */
 
