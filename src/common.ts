@@ -1,6 +1,6 @@
 /* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-import {AbortController} from 'abortcontroller-polyfill';
+import {AbortController} from 'abortcontroller-polyfill/dist/cjs-ponyfill';
 import {isBrowser} from 'browser-or-node';
 /* LEGACY-BROWSER-SUPPORT-END */
 
