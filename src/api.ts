@@ -112,11 +112,7 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
             return apiResponse;
           }
         )
-        .catch(() => {
-          return new Promise(resolve => {
-            resolve(apiResponse);
-          });
-        });
+        .catch(() => Promise.resolve(apiResponse));
     }
   );
 }
