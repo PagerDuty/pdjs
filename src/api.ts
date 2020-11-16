@@ -100,16 +100,20 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
   return request(url, options).then(
     (response: Response): APIPromise => {
       const apiResponse = response as APIResponse;
+      apiResponse.response = response;
       const resource = resourceKey(url);
-      return response.json().then(
-        (data): APIResponse => {
-          apiResponse.next = nextFunc(url, options, data);
-          apiResponse.data = data;
-          apiResponse.resource = resource ? data[resource] : null;
-          apiResponse.response = response;
-          return apiResponse;
-        }
-      );
+      if (response.status === 200) {
+        return response.json().then(
+          (data): APIResponse => {
+            apiResponse.next = nextFunc(url, options, data);
+            apiResponse.data = data;
+            apiResponse.resource = resource ? data[resource] : null;
+            return apiResponse;
+          }
+        );
+      } else {
+        return new Promise((resolve) => {resolve(apiResponse)});
+      }
     }
   );
 }
