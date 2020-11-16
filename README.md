@@ -155,13 +155,13 @@ There is some very simple retry logic baked into each request in the case that t
 
 Two browser-ready scripts are provided:
 
-- [dist/pdjs.js](https://raw.githubusercontent.com/PagerDuty/pdjs/2.0/dist/pdjs.js): For browsers supporting `fetch`.
-- [dist/pdjs-legacy.js](https://raw.githubusercontent.com/PagerDuty/pdjs/2.0/dist/pdjs-legacy.js): For older browsers requiring a `fetch` polyfill -- mostly IE 11.
+- [dist/pdjs.js](https://raw.githubusercontent.com/PagerDuty/pdjs/main/dist/pdjs.js): For browsers supporting `fetch`.
+- [dist/pdjs-legacy.js](https://raw.githubusercontent.com/PagerDuty/pdjs/maindist/pdjs-legacy.js): For older browsers requiring a `fetch` polyfill -- mostly IE 11.
 
 Either of these files can be used by copying them into your project and including them directly, with all functions namespaced `PagerDuty`:
 
 ```html
-<script src="pdjs.js"></script>
+<script src="https://raw.githubusercontent.com/PagerDuty/pdjs/main/dist/pdjs.js"></script>
 <script>
   PagerDuty.api({token: 'someToken1234567890', endpoint: '/incidents'})
     .then(response => console.log(response.data))

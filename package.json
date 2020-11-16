@@ -1,5 +1,5 @@
 {
-  "name": "pdjs",
+  "name": "@pagerduty/pdjs",
   "version": "2.0.0",
   "description": "A new simple JavaScript wrapper for the PagerDuty API",
   "main": "build/src/index.js",
@@ -8,7 +8,9 @@
     "build/src"
   ],
   "license": "Apache-2.0",
-  "keywords": [],
+  "keywords": [
+    "pagerduty"
+  ],
   "scripts": {
     "build": "tsc && webpack",
     "test": "jest",
