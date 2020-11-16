@@ -102,20 +102,21 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
       const apiResponse = response as APIResponse;
       apiResponse.response = response;
       const resource = resourceKey(url);
-      if (response.status === 200) {
-        return response.json().then(
+      return response
+        .json()
+        .then(
           (data): APIResponse => {
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
             return apiResponse;
           }
-        );
-      } else {
-        return new Promise(resolve => {
-          resolve(apiResponse);
+        )
+        .catch(() => {
+          return new Promise(resolve => {
+            resolve(apiResponse);
+          });
         });
-      }
     }
   );
 }
