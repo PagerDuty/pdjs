@@ -112,7 +112,9 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
           }
         );
       } else {
-        return new Promise((resolve) => {resolve(apiResponse)});
+        return new Promise(resolve => {
+          resolve(apiResponse);
+        });
       }
     }
   );
