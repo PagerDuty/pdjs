@@ -1,11 +1,11 @@
 {
   "name": "@pagerduty/pdjs",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A new simple JavaScript wrapper for the PagerDuty API",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
-    "build/src"
+    "build/src",
   ],
   "license": "Apache-2.0",
   "keywords": [
