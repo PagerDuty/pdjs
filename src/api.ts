@@ -47,19 +47,19 @@ export function api(
 
   // allows for Token and Bearer token types to be used in Authorization
   type tempTypes = {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
 
   const types: tempTypes = {
-    "bearer": "Bearer ",
-    "token": "Token token="
+    bearer: 'Bearer ',
+    token: 'Token token=',
   };
 
   const {
     endpoint,
     server = 'api.pagerduty.com',
     token,
-    tokenType = apiParameters.tokenType || "token",
+    tokenType = apiParameters.tokenType || 'token',
     url,
     version = 2,
     data,

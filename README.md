@@ -38,6 +38,10 @@ pd.post('/incidents', { data: { ... } }).then(...)
 ```
 #### `tokenType`
 Allows you to set either `token` or `bearer` tokens. Defaults to `token` but provides ability to use `bearer` as well.
+- [Tokens](https://developer.pagerduty.com/docs/rest-api-v2/authentication/) are generated in your PagerDuty account.
+- **Bearer** tokens are generated through an [OAuth 2.0](https://developer.pagerduty.com/docs/app-integration-development/oauth-2-functionality/) authorization flow.
+
+
 
 #### `url` or `endpoint`
 

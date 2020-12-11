@@ -12,7 +12,7 @@ This example will list users contact info.
     <script src="../dist/pdjs.js"></script>
     <script>
       // This token is a test read-only token.
-      const pd = PagerDuty.api({token: 'y_NbAkKc66ryYTWUXYEu'});
+      const pd = PagerDuty.api({token: 'y_NbAkKc66ryYTWUXYEu', tokenType: 'token'});
       const openIncidents = pd.get('/users',
         {
           params: {
