@@ -27,7 +27,7 @@ There are some simply convience methods. `get()`, `post()`, `put()`, and `delete
 ```javascript
 import {api} from 'pdjs';
 
-const pd = api({token: 'someToken1234567890'})
+const pd = api({token: 'someToken1234567890' tokenType: 'token'})
 
 pd.get('/incidents')
   .then({data, resource, next} => console.log(data, resource, next))
@@ -36,6 +36,8 @@ pd.get('/incidents')
 // Similarly, for `post`, `put`, `patch` and `delete`.
 pd.post('/incidents', { data: { ... } }).then(...)
 ```
+#### `tokenType`
+Allows you to set either `token` or `bearer` tokens. Defaults to `token` but provides ability to use `bearer` as well.
 
 #### `url` or `endpoint`
 

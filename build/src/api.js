@@ -9,13 +9,17 @@ function api(apiParameters) {
     if (!apiParameters.endpoint && !apiParameters.url) {
         return partialCall(apiParameters);
     }
-    const { endpoint, server = 'api.pagerduty.com', token, url, version = 2, data, ...rest } = apiParameters;
+    const types = {
+        "bearer": "Bearer ",
+        "token": "Token token="
+    };
+    const { endpoint, server = 'api.pagerduty.com', token, tokenType = apiParameters.tokenType || "token", url, version = 2, data, ...rest } = apiParameters;
     const config = {
         method: 'GET',
         ...rest,
         headers: {
             Accept: `application/vnd.pagerduty+json;version=${version}`,
-            Authorization: `Token token=${token}`,
+            Authorization: `${types[tokenType]}${token}`,
             ...rest.headers,
         },
     };
