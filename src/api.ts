@@ -46,11 +46,11 @@ export function api(
   }
 
   // allows for Token and Bearer token types to be used in Authorization
-  type tempTypes = {
+  type typeMap = {
     [key: string]: string;
   };
 
-  const types: tempTypes = {
+  const types: typeMap = {
     bearer: 'Bearer ',
     token: 'Token token=',
   };
