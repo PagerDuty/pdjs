@@ -20,6 +20,7 @@ export type APIParameters = RequestOptions & {
   url?: string;
   data?: object;
   token?: string;
+  tokenType?: string;
   server?: string;
   version?: number;
 } & ({endpoint: string} | {url: string});
@@ -44,10 +45,21 @@ export function api(
     return partialCall(apiParameters);
   }
 
+  // allows for Token and Bearer token types to be used in Authorization
+  type typeMap = {
+    [key: string]: string;
+  };
+
+  const types: typeMap = {
+    bearer: 'Bearer ',
+    token: 'Token token=',
+  };
+
   const {
     endpoint,
     server = 'api.pagerduty.com',
     token,
+    tokenType = apiParameters.tokenType || 'token',
     url,
     version = 2,
     data,
@@ -59,7 +71,7 @@ export function api(
     ...rest,
     headers: {
       Accept: `application/vnd.pagerduty+json;version=${version}`,
-      Authorization: `Token token=${token!}`,
+      Authorization: `${types[tokenType]}${token!}`,
       ...rest.headers,
     },
   };
