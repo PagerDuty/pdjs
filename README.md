@@ -27,7 +27,7 @@ There are some simply convience methods. `get()`, `post()`, `put()`, and `delete
 ```javascript
 import {api} from 'pdjs';
 
-const pd = api({token: 'someToken1234567890'})
+const pd = api({token: 'someToken1234567890'});
 
 pd.get('/incidents')
   .then({data, resource, next} => console.log(data, resource, next))
@@ -35,6 +35,14 @@ pd.get('/incidents')
 
 // Similarly, for `post`, `put`, `patch` and `delete`.
 pd.post('/incidents', { data: { ... } }).then(...)
+```
+#### `tokenType`
+Allows you to set either `token` or `bearer` tokens. Defaults to `token` but provides ability to use `bearer` as well.
+- [Tokens](https://developer.pagerduty.com/docs/rest-api-v2/authentication/) are generated in your PagerDuty account.
+- **Bearer** tokens are generated through an [OAuth 2.0](https://developer.pagerduty.com/docs/app-integration-development/oauth-2-functionality/) authorization flow. For example, to use a Bearer token when initializing `api` you'll pass int the `tokenType` parameter, like so:
+
+```javascript
+const pd = api({token: 'someBearerToken1234567890', tokenType: 'bearer'});
 ```
 
 #### `url` or `endpoint`

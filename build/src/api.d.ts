@@ -17,6 +17,7 @@ export declare type APIParameters = RequestOptions & {
     url?: string;
     data?: object;
     token?: string;
+    tokenType?: string;
     server?: string;
     version?: number;
 } & ({
