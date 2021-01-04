@@ -126,8 +126,8 @@ function partialCall(apiParameters) {
                 .then(response => allInner(responses.concat([response])));
         }
         function repackResponses(responses) {
-            //
-            let repackedResponse = responses.shift();
+            // Repack the responses object to make it more user friendly.
+            let repackedResponse = responses.shift(); // Use the first response to build the standard response object
             repackedResponse.data = [repackedResponse.data];
             responses.forEach((response) => {
                 repackedResponse.data = repackedResponse.data.concat(response.data);
