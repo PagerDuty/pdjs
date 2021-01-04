@@ -218,27 +218,21 @@ function partialCall(apiParameters: Partial<APIParameters>) {
   ): APIPromise => {
     function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
       const response = responses[responses.length - 1];
-
       if (!response.next) {
+        // Base case, resolve and return all responses.
         return Promise.resolve(responses);
       }
-
+      // If there are still more resources to get then concat and repeat.
       return response
         .next()
         .then(response => allInner(responses.concat([response])));
     }
 
     function repackResponses(responses: APIResponse[]): APIPromise {
-      let repackedResponse : APIResponse = responses.shift() as APIResponse
-      // Object.assign(responses[0] as APIResponse, repackedResponse)
-
+      // Repack the responses object to make it more user friendly.
+      let repackedResponse : APIResponse = responses.shift() as APIResponse // Use the first response to build the standard response object
       repackedResponse.data = [repackedResponse.data]
-      console.log(repackedResponse)
       responses.forEach((response) => {
-        console.log('---')
-        console.log(response)
-        console.log(repackedResponse.data);
-        console.log(response.data);
         repackedResponse.data = repackedResponse.data.concat(response.data);
         repackedResponse.resource = repackedResponse.resource.concat(response.resource);
       })
@@ -246,7 +240,6 @@ function partialCall(apiParameters: Partial<APIParameters>) {
     }
 
     const method = 'get'
-
     return (api({
       endpoint,
       method,

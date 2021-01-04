@@ -117,22 +117,19 @@ function partialCall(apiParameters) {
         function allInner(responses) {
             const response = responses[responses.length - 1];
             if (!response.next) {
+                // Base case, resolve and return all responses.
                 return Promise.resolve(responses);
             }
+            // If there are still more resources to get then concat and repeat.
             return response
                 .next()
                 .then(response => allInner(responses.concat([response])));
         }
         function repackResponses(responses) {
+            //
             let repackedResponse = responses.shift();
-            // Object.assign(responses[0] as APIResponse, repackedResponse)
             repackedResponse.data = [repackedResponse.data];
-            console.log(repackedResponse);
             responses.forEach((response) => {
-                console.log('---');
-                console.log(response);
-                console.log(repackedResponse.data);
-                console.log(response.data);
                 repackedResponse.data = repackedResponse.data.concat(response.data);
                 repackedResponse.resource = repackedResponse.resource.concat(response.resource);
             });
