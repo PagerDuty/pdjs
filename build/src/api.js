@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.all = exports.api = void 0;
+exports.api = void 0;
 const common_1 = require("./common");
 function api(apiParameters) {
     var _a;
@@ -33,19 +33,6 @@ function api(apiParameters) {
     return apiRequest(url !== null && url !== void 0 ? url : `https://${server}/${endpoint.replace(/^\/+/, '')}`, config);
 }
 exports.api = api;
-function all(apiParameters) {
-    return api(apiParameters).then(response => allInner([response]));
-}
-exports.all = all;
-function allInner(responses) {
-    const response = responses[responses.length - 1];
-    if (!response.next) {
-        return Promise.resolve(responses);
-    }
-    return response
-        .next()
-        .then(response => allInner(responses.concat([response])));
-}
 function apiRequest(url, options) {
     return common_1.request(url, options).then((response) => {
         const apiResponse = response;
@@ -126,7 +113,41 @@ function partialCall(apiParameters) {
     partial.put = shorthand('put');
     partial.patch = shorthand('patch');
     partial.delete = shorthand('delete');
-    partial.all = (apiParameters) => all(apiParameters);
+    partial.all = (endpoint, shorthandParameters) => {
+        function allInner(responses) {
+            const response = responses[responses.length - 1];
+            if (!response.next) {
+                return Promise.resolve(responses);
+            }
+            return response
+                .next()
+                .then(response => allInner(responses.concat([response])));
+        }
+        function repackResponses(responses) {
+            let repackedResponse = responses.shift();
+            // Object.assign(responses[0] as APIResponse, repackedResponse)
+            repackedResponse.data = [repackedResponse.data];
+            console.log(repackedResponse);
+            responses.forEach((response) => {
+                console.log('---');
+                console.log(response);
+                console.log(repackedResponse.data);
+                console.log(response.data);
+                repackedResponse.data = repackedResponse.data.concat(response.data);
+                repackedResponse.resource = repackedResponse.resource.concat(response.resource);
+            });
+            return Promise.resolve(repackedResponse);
+        }
+        const method = 'get';
+        return api({
+            endpoint,
+            method,
+            ...partialParameters,
+            ...shorthandParameters,
+        })
+            .then(response => allInner([response]))
+            .then(responses => repackResponses(responses));
+    };
     return partial;
 }
 //# sourceMappingURL=api.js.map

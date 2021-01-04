@@ -12,22 +12,16 @@ This example will list users contact info.
     <script src="../dist/pdjs.js"></script>
     <script>
       // This token is a test read-only token.
-      const pd = PagerDuty.api({token: 'y_NbAkKc66ryYTWUXYEu', tokenType: 'token'});
-      const openIncidents = pd.get('/users',
-        {
-          params: {
-            'include[]': 'contact_methods'
-          }
-        }
-      )
+      const pd = PagerDuty.api({token: '5b8FDWqz-pbpFZ6_WSKb', tokenType: 'token'});
+      const openIncidents = pd.all('/schedules')
         .then(({resource}) => {
-          // The Users are returned in the `resource` key.
-          resource.forEach((user, index) => {
-            // Get the user data and append it to our DOM.
-            let newUser = document.createElement('li');
-            let text = document.createTextNode(`${user['name']}: ${user['email']}`)
-            newUser.appendChild(text);
-            document.getElementById('listOfUsers').appendChild(newUser);
+          console.log(resource)
+          resource.forEach((model, index) => {
+            pd.delete(`/schedules/${model['id']}`).then(() => {
+              console.log("Success");
+            }).catch((error) => {
+              console.log(error);
+            })
           })
         })
         .catch(console.error);

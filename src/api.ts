@@ -12,7 +12,7 @@ export interface PartialCall {
   put: ShorthandCall;
   patch: ShorthandCall;
   delete: ShorthandCall;
-  all: (apiParameters: APIParameters) => Promise<APIResponse[]>;
+  all: ShorthandCall;
 }
 
 export type APIParameters = RequestOptions & {
@@ -88,24 +88,6 @@ export function api(
     url ?? `https://${server}/${endpoint!.replace(/^\/+/, '')}`,
     config
   );
-}
-
-export function all(apiParameters: APIParameters): Promise<APIResponse[]> {
-  return (api(apiParameters) as APIPromise).then(response =>
-    allInner([response])
-  );
-}
-
-function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
-  const response = responses[responses.length - 1];
-
-  if (!response.next) {
-    return Promise.resolve(responses);
-  }
-
-  return response
-    .next()
-    .then(response => allInner(responses.concat([response])));
 }
 
 function apiRequest(url: string, options: RequestOptions): APIPromise {
@@ -230,7 +212,50 @@ function partialCall(apiParameters: Partial<APIParameters>) {
   partial.patch = shorthand('patch');
   partial.delete = shorthand('delete');
 
-  partial.all = (apiParameters: APIParameters) => all(apiParameters);
+  partial.all = (
+    endpoint: string,
+    shorthandParameters?: Partial<APIParameters>
+  ): APIPromise => {
+    function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
+      const response = responses[responses.length - 1];
+
+      if (!response.next) {
+        return Promise.resolve(responses);
+      }
+
+      return response
+        .next()
+        .then(response => allInner(responses.concat([response])));
+    }
+
+    function repackResponses(responses: APIResponse[]): APIPromise {
+      let repackedResponse : APIResponse = responses.shift() as APIResponse
+      // Object.assign(responses[0] as APIResponse, repackedResponse)
+
+      repackedResponse.data = [repackedResponse.data]
+      console.log(repackedResponse)
+      responses.forEach((response) => {
+        console.log('---')
+        console.log(response)
+        console.log(repackedResponse.data);
+        console.log(response.data);
+        repackedResponse.data = repackedResponse.data.concat(response.data);
+        repackedResponse.resource = repackedResponse.resource.concat(response.resource);
+      })
+      return Promise.resolve(repackedResponse)
+    }
+
+    const method = 'get'
+
+    return (api({
+      endpoint,
+      method,
+      ...partialParameters,
+      ...shorthandParameters,
+    }) as APIPromise)
+      .then(response => allInner([response]))
+      .then(responses => repackResponses(responses))
+  }
 
   return partial;
 }

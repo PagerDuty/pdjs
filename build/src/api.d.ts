@@ -10,7 +10,7 @@ export interface PartialCall {
     put: ShorthandCall;
     patch: ShorthandCall;
     delete: ShorthandCall;
-    all: (apiParameters: APIParameters) => Promise<APIResponse[]>;
+    all: ShorthandCall;
 }
 export declare type APIParameters = RequestOptions & {
     endpoint?: string;
@@ -34,4 +34,3 @@ export interface APIResponse extends Response {
 }
 export declare function api(apiParameters: APIParameters): APIPromise;
 export declare function api(apiParameters: Partial<APIParameters>): PartialCall;
-export declare function all(apiParameters: APIParameters): Promise<APIResponse[]>;
