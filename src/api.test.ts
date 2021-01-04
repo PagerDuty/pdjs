@@ -172,61 +172,49 @@ test('API explodes list based parameters properly', async done => {
 });
 
 test('API `all` calls for offset should generate requests until no more results', async done => {
-
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1')
     .reply(200, {
-      incidents: [
-        {'name': 1}
-      ],
+      incidents: [{name: 1}],
       limit: 1,
       offset: 0,
       more: true,
-      total: null
+      total: null,
     });
 
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1&offset=1')
     .reply(200, {
-      incidents: [
-        {'name': 2}
-      ],
+      incidents: [{name: 2}],
       limit: 1,
       offset: 1,
       more: true,
-      total: null
+      total: null,
     });
 
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1&offset=2')
     .reply(200, {
-      incidents: [
-        {'name': 3}
-      ],
+      incidents: [{name: 3}],
       limit: 1,
       offset: 2,
       more: false,
-      total: null
+      total: null,
     });
 
   const pd = api({token: 'someToken1234567890'});
 
-  const responses = await pd.all('/incidents', {
-    data: {limit: 1}
-  });
+  const responses = await pd.all('/incidents', {data: {limit: 1}});
 
-  expect(responses.resource).toEqual([{'name': 1}, {'name': 2}, {'name': 3}]);
+  expect(responses.resource).toEqual([{name: 1}, {name: 2}, {name: 3}]);
   done();
 });
 
 test('API `all` calls for cursor should generate requests until no more results', async done => {
-
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1')
     .reply(200, {
-      incidents: [
-        {'name': 1}
-      ],
+      incidents: [{name: 1}],
       limit: 1,
       cursor: 'one',
     });
@@ -234,9 +222,7 @@ test('API `all` calls for cursor should generate requests until no more results'
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1&cursor=one')
     .reply(200, {
-      incidents: [
-        {'name': 2}
-      ],
+      incidents: [{name: 2}],
       limit: 1,
       cursor: 'two',
     });
@@ -244,9 +230,7 @@ test('API `all` calls for cursor should generate requests until no more results'
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1&cursor=two')
     .reply(200, {
-      incidents: [
-        {'name': 3}
-      ],
+      incidents: [{name: 3}],
       limit: 1,
       cursor: null,
     });
@@ -257,13 +241,11 @@ test('API `all` calls for cursor should generate requests until no more results'
     data: {limit: 1},
   });
 
-  expect(responses.resource).toEqual([{'name': 1}, {'name': 2}, {'name': 3}]);
+  expect(responses.resource).toEqual([{name: 1}, {name: 2}, {name: 3}]);
   done();
 });
 
-
 test('API `get` calls with shorthand `get` should succeed', async done => {
-
   nock('https://api.pagerduty.com').get('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -276,7 +258,6 @@ test('API `get` calls with shorthand `get` should succeed', async done => {
 });
 
 test('API `post` calls with shorthand `get` should succeed', async done => {
-
   nock('https://api.pagerduty.com').post('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -289,7 +270,6 @@ test('API `post` calls with shorthand `get` should succeed', async done => {
 });
 
 test('API `put` calls with shorthand `get` should succeed', async done => {
-
   nock('https://api.pagerduty.com').put('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -302,7 +282,6 @@ test('API `put` calls with shorthand `get` should succeed', async done => {
 });
 
 test('API `patch` calls with shorthand `get` should succeed', async done => {
-
   nock('https://api.pagerduty.com').patch('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -315,7 +294,6 @@ test('API `patch` calls with shorthand `get` should succeed', async done => {
 });
 
 test('API `delete` calls with shorthand `get` should succeed', async done => {
-
   nock('https://api.pagerduty.com').delete('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});

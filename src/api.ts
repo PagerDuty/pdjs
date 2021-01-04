@@ -230,16 +230,18 @@ function partialCall(apiParameters: Partial<APIParameters>) {
 
     function repackResponses(responses: APIResponse[]): APIPromise {
       // Repack the responses object to make it more user friendly.
-      let repackedResponse : APIResponse = responses.shift() as APIResponse // Use the first response to build the standard response object
-      repackedResponse.data = [repackedResponse.data]
-      responses.forEach((response) => {
+      const repackedResponse = responses.shift() as APIResponse; // Use the first response to build the standard response object
+      repackedResponse.data = [repackedResponse.data];
+      responses.forEach(response => {
         repackedResponse.data = repackedResponse.data.concat(response.data);
-        repackedResponse.resource = repackedResponse.resource.concat(response.resource);
-      })
-      return Promise.resolve(repackedResponse)
+        repackedResponse.resource = repackedResponse.resource.concat(
+          response.resource
+        );
+      });
+      return Promise.resolve(repackedResponse);
     }
 
-    const method = 'get'
+    const method = 'get';
     return (api({
       endpoint,
       method,
@@ -247,8 +249,8 @@ function partialCall(apiParameters: Partial<APIParameters>) {
       ...shorthandParameters,
     }) as APIPromise)
       .then(response => allInner([response]))
-      .then(responses => repackResponses(responses))
-  }
+      .then(responses => repackResponses(responses));
+  };
 
   return partial;
 }
