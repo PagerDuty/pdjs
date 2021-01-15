@@ -59,7 +59,7 @@ function apiRequest(url, options) {
             apiResponse.resource = resource ? data[resource] : null;
             return apiResponse;
         })
-            .catch(() => Promise.resolve(apiResponse));
+            .catch(() => Promise.reject(apiResponse));
     });
 }
 function resourceKey(url) {
