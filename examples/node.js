@@ -1,20 +1,13 @@
-
 // How to use pdjs in the a node environment
 // This example will list users contact info.
-const PagerDuty = require('../build/src/index.js')
+const PagerDuty = require('../build/src/index.js');
 
 const pd = PagerDuty.api({token: 'y_NbAkKc66ryYTWUXYEu', tokenType: 'token'});
-const openIncidents = pd.get('/users',
-  {
-    params: {
-      'include[]': 'contact_methods'
-    }
-  }
-)
+pd.get('/users', {params: {'include[]': 'contact_methods'}})
   .then(({resource}) => {
     // The Users are returned in the `resource` key.
-    resource.forEach((user, index) => {
-      console.log(`${user['name']}: ${user['email']}`)
-    })
+    resource.forEach(user => {
+      console.log(`${user['name']}: ${user['email']}`);
+    });
   })
   .catch(console.error);
