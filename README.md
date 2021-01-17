@@ -25,7 +25,7 @@ REST API calls can be done using the convenience methods or by passing in a `url
 There are some simply convience methods. `get()`, `post()`, `put()`, and `delete()`.
 
 ```javascript
-import {api} from 'pdjs';
+import {api} from '@pagerduty/pdjs';
 
 const pd = api({token: 'someToken1234567890'});
 
@@ -84,7 +84,7 @@ Note that the PagerDuty API has a limit for most endpoints and recommends using 
 The response object of an API call also contains a `nextFunc` which can be used to define your own Pagination function if you feel included.
 
 ```javascript
-import {api} from 'pdjs';
+import {api} from '@pagerduty/pdjs';
 
 const pd = api({token: 'someToken1234567890'});
 
@@ -102,7 +102,7 @@ There is some very simple retry logic baked into each request in the case that t
 Events V2 is supported along with Change Events.
 
 ```javascript
-import {event} from 'pdjs';
+import {event} from '@pagerduty/pdjs';
 event({
   data: {
     routing_key: 'YOUR_ROUTING_KEY',
@@ -122,7 +122,7 @@ event({
 #### Convenience Methods
 
 ```javascript
-import {change, trigger, acknowledge, resolve} from 'pdjs';
+import {change, trigger, acknowledge, resolve} from '@pagerduty/pdjs';
 
 change({
     "routing_key": "YOUR_ROUTING_KEY",
