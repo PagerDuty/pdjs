@@ -146,68 +146,54 @@ test('API `all` calls for offset should generate requests until no more results'
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1')
         .reply(200, {
-        incidents: [
-            { 'name': 1 }
-        ],
+        incidents: [{ name: 1 }],
         limit: 1,
         offset: 0,
         more: true,
-        total: null
+        total: null,
     });
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1&offset=1')
         .reply(200, {
-        incidents: [
-            { 'name': 2 }
-        ],
+        incidents: [{ name: 2 }],
         limit: 1,
         offset: 1,
         more: true,
-        total: null
+        total: null,
     });
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1&offset=2')
         .reply(200, {
-        incidents: [
-            { 'name': 3 }
-        ],
+        incidents: [{ name: 3 }],
         limit: 1,
         offset: 2,
         more: false,
-        total: null
+        total: null,
     });
     const pd = index_1.api({ token: 'someToken1234567890' });
-    const responses = await pd.all('/incidents', {
-        data: { limit: 1 }
-    });
-    expect(responses.resource).toEqual([{ 'name': 1 }, { 'name': 2 }, { 'name': 3 }]);
+    const responses = await pd.all('/incidents', { data: { limit: 1 } });
+    expect(responses.resource).toEqual([{ name: 1 }, { name: 2 }, { name: 3 }]);
     done();
 });
 test('API `all` calls for cursor should generate requests until no more results', async (done) => {
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1')
         .reply(200, {
-        incidents: [
-            { 'name': 1 }
-        ],
+        incidents: [{ name: 1 }],
         limit: 1,
         cursor: 'one',
     });
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1&cursor=one')
         .reply(200, {
-        incidents: [
-            { 'name': 2 }
-        ],
+        incidents: [{ name: 2 }],
         limit: 1,
         cursor: 'two',
     });
     nock('https://api.pagerduty.com')
         .get('/incidents?limit=1&cursor=two')
         .reply(200, {
-        incidents: [
-            { 'name': 3 }
-        ],
+        incidents: [{ name: 3 }],
         limit: 1,
         cursor: null,
     });
@@ -215,7 +201,7 @@ test('API `all` calls for cursor should generate requests until no more results'
     const responses = await pd.all('/incidents', {
         data: { limit: 1 },
     });
-    expect(responses.resource).toEqual([{ 'name': 1 }, { 'name': 2 }, { 'name': 3 }]);
+    expect(responses.resource).toEqual([{ name: 1 }, { name: 2 }, { name: 3 }]);
     done();
 });
 test('API `get` calls with shorthand `get` should succeed', async (done) => {

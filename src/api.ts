@@ -106,7 +106,7 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
             return apiResponse;
           }
         )
-        .catch(() => Promise.resolve(apiResponse));
+        .catch(() => Promise.reject(apiResponse));
     }
   );
 }

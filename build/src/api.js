@@ -46,7 +46,7 @@ function apiRequest(url, options) {
             apiResponse.resource = resource ? data[resource] : null;
             return apiResponse;
         })
-            .catch(() => Promise.resolve(apiResponse));
+            .catch(() => Promise.reject(apiResponse));
     });
 }
 function resourceKey(url) {
@@ -127,9 +127,9 @@ function partialCall(apiParameters) {
         }
         function repackResponses(responses) {
             // Repack the responses object to make it more user friendly.
-            let repackedResponse = responses.shift(); // Use the first response to build the standard response object
+            const repackedResponse = responses.shift(); // Use the first response to build the standard response object
             repackedResponse.data = [repackedResponse.data];
-            responses.forEach((response) => {
+            responses.forEach(response => {
                 repackedResponse.data = repackedResponse.data.concat(response.data);
                 repackedResponse.resource = repackedResponse.resource.concat(response.resource);
             });
