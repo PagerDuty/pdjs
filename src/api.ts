@@ -12,7 +12,7 @@ export interface PartialCall {
   put: ShorthandCall;
   patch: ShorthandCall;
   delete: ShorthandCall;
-  all: (apiParameters: APIParameters) => Promise<APIResponse[]>;
+  all: ShorthandCall;
 }
 
 export type APIParameters = RequestOptions & {
@@ -88,24 +88,6 @@ export function api(
     url ?? `https://${server}/${endpoint!.replace(/^\/+/, '')}`,
     config
   );
-}
-
-export function all(apiParameters: APIParameters): Promise<APIResponse[]> {
-  return (api(apiParameters) as APIPromise).then(response =>
-    allInner([response])
-  );
-}
-
-function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
-  const response = responses[responses.length - 1];
-
-  if (!response.next) {
-    return Promise.resolve(responses);
-  }
-
-  return response
-    .next()
-    .then(response => allInner(responses.concat([response])));
 }
 
 function apiRequest(url: string, options: RequestOptions): APIPromise {
@@ -230,7 +212,45 @@ function partialCall(apiParameters: Partial<APIParameters>) {
   partial.patch = shorthand('patch');
   partial.delete = shorthand('delete');
 
-  partial.all = (apiParameters: APIParameters) => all(apiParameters);
+  partial.all = (
+    endpoint: string,
+    shorthandParameters?: Partial<APIParameters>
+  ): APIPromise => {
+    function allInner(responses: APIResponse[]): Promise<APIResponse[]> {
+      const response = responses[responses.length - 1];
+      if (!response.next) {
+        // Base case, resolve and return all responses.
+        return Promise.resolve(responses);
+      }
+      // If there are still more resources to get then concat and repeat.
+      return response
+        .next()
+        .then(response => allInner(responses.concat([response])));
+    }
+
+    function repackResponses(responses: APIResponse[]): APIPromise {
+      // Repack the responses object to make it more user friendly.
+      const repackedResponse = responses.shift() as APIResponse; // Use the first response to build the standard response object
+      repackedResponse.data = [repackedResponse.data];
+      responses.forEach(response => {
+        repackedResponse.data = repackedResponse.data.concat(response.data);
+        repackedResponse.resource = repackedResponse.resource.concat(
+          response.resource
+        );
+      });
+      return Promise.resolve(repackedResponse);
+    }
+
+    const method = 'get';
+    return (api({
+      endpoint,
+      method,
+      ...partialParameters,
+      ...shorthandParameters,
+    }) as APIPromise)
+      .then(response => allInner([response]))
+      .then(responses => repackResponses(responses));
+  };
 
   return partial;
 }

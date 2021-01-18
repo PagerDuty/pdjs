@@ -75,13 +75,34 @@ pd.get('/incidents')
 
 ```
 
+#### Pagination
+
+There's an convience method `all` that attempts to fetch all pages for a given endpoint and set of parameters. For convenience this function supports both offset and cursor based pagination.
+
+Note that the PagerDuty API has a limit for most endpoints and recommends using parameters to refine searches where more results are necessary. More information can be found in the [Developer Documentation.](https://developer.pagerduty.com/docs/rest-api-v2/pagination/)
+
+The response object of an API call also contains a `nextFunc` which can be used to define your own Pagination function if you feel included.
+
+```javascript
+import {api} from 'pdjs';
+
+const pd = api({token: 'someToken1234567890'});
+
+pd.all('/incidents')
+  .then({data, resource} => console.log(data, resource))
+  .catch(console.error);
+```
+
+### Retries
+
+There is some very simple retry logic baked into each request in the case that the PagerDuty API rate limits your requests (only when it responds HTTP Code 429). Requests will retry 3 times waiting 20 seconds between each request. If the request is still being rate limited after 3 attempts the client will simply return the 429 response.
+
 ### Events API
 
 Events V2 is supported along with Change Events.
 
 ```javascript
 import {event} from 'pdjs';
-
 event({
   data: {
     routing_key: 'YOUR_ROUTING_KEY',
@@ -133,31 +154,6 @@ resolve({...})
   .then(console.log)
   .catch(console.error);
 ```
-
-### Pagination
-
-There's an async `all` that attempts to fetch all pages for a given endpoint and set of parameters. For convenience this function supports both offset and cursor based pagination.
-
-Note that the PagerDuty API has a limit of 10,000 for most endpoints and recommends using parameters to refine searches where more results are necessary. More information can be found in the [Developer Documentation.](https://developer.pagerduty.com/docs/rest-api-v2/pagination/)
-
-```javascript
-import {all} from 'pdjs';
-
-// List every API-accessible incident.
-const responses = await all({
-  token: 'someToken1234567890',
-  endpoint: '/incidents',
-  limit: 5000,
-});
-
-for (response of responses) {
-  console.log(response.data);
-}
-```
-
-### Retries
-
-There is some very simple retry logic baked into each request in the case that the PagerDuty API rate limits your requests (only when it responds HTTP Code 429). Requests will retry 3 times waiting 20 seconds between each request. If the request is still being rate limited after 3 attemps the client will simply return the 429 response.
 
 ### Browser
 
