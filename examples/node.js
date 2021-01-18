@@ -1,4 +1,4 @@
-// How to use pdjs in the a node environment
+// How to use pdjs in a node environment
 // This example will list users contact info.
 const PagerDuty = require('../build/src/index.js');
 
