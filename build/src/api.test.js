@@ -244,4 +244,12 @@ test('API `delete` calls with shorthand `get` should succeed', async (done) => {
     expect(response.data).toEqual(EMPTY_BODY);
     done();
 });
+test('API catches ETIMEDOUT error', async (done) => {
+    nock('https://api.pagerduty.com')
+        .get('/incidents')
+        .replyWithError({ code: 'ETIMEDOUT' });
+    const pd = index_1.api({ token: 'someToken1234567890' });
+    await expect(pd.get('/incidents')).rejects.toThrow('request to https://api.pagerduty.com/incidents failed, reason: undefined');
+    done();
+});
 //# sourceMappingURL=api.test.js.map
