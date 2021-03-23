@@ -45,21 +45,23 @@ function fetch_retry(
   options: RequestOptions
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
-    fetch(url, options).then(response => {
-      // We don't want to `reject` when retries have finished
-      // Instead simply stop trying and return.
-      if (retries === 0) return resolve(response);
-      if (response.status === 429) {
-        const {retryTimeout = 20000} = options;
-        retryTimeoutPromise(retryTimeout).then(() => {
-          fetch_retry(url, retries - 1, options)
-            .then(resolve)
-            .catch(reject);
-        });
-      } else {
-        resolve(response);
-      }
-    });
+    fetch(url, options)
+      .then(response => {
+        // We don't want to `reject` when retries have finished
+        // Instead simply stop trying and return.
+        if (retries === 0) return resolve(response);
+        if (response.status === 429) {
+          const {retryTimeout = 20000} = options;
+          retryTimeoutPromise(retryTimeout).then(() => {
+            fetch_retry(url, retries - 1, options)
+              .then(resolve)
+              .catch(reject);
+          });
+        } else {
+          resolve(response);
+        }
+      })
+      .catch(reject);
   });
 }
 
