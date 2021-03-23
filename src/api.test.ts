@@ -305,12 +305,15 @@ test('API `delete` calls with shorthand `get` should succeed', async done => {
   done();
 });
 
-
 test('API catches ETIMEDOUT error', async done => {
-  nock('https://api.pagerduty.com').get('/incidents').replyWithError({code: 'ETIMEDOUT'})
+  nock('https://api.pagerduty.com')
+    .get('/incidents')
+    .replyWithError({code: 'ETIMEDOUT'});
 
   const pd = api({token: 'someToken1234567890'});
 
-  await expect(pd.get('/incidents')).rejects.toThrow('request to https://api.pagerduty.com/incidents failed, reason: undefined');
+  await expect(pd.get('/incidents')).rejects.toThrow(
+    'request to https://api.pagerduty.com/incidents failed, reason: undefined'
+  );
   done();
 });
