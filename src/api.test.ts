@@ -89,7 +89,6 @@ test('API calls return successfully on DELETE endpoints', async done => {
   done();
 });
 
-
 test('API calls support partial application with url', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
