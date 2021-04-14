@@ -30,7 +30,7 @@ test('Events API properly passes Events V2 requests', async done => {
     },
   })
     .post('/v2/enqueue')
-    .reply(200, body);
+    .reply(202, body);
 
   const response = await event(eventPayloadV2);
 
@@ -54,7 +54,7 @@ test('Events API properly passes Change Events requests', async done => {
     },
   })
     .post('/v2/change/enqueue')
-    .reply(200, body);
+    .reply(202, body);
 
   const response = await change(eventPayloadV2);
 
@@ -80,7 +80,7 @@ test('Events API properly passes Events V2 requests with images/links/details', 
     },
   })
     .post('/v2/enqueue')
-    .reply(200, body);
+    .reply(202, body);
 
   const response = await event({
     data: {
@@ -128,11 +128,11 @@ test('Events API shorthands should send corresponding events', async done => {
     },
   })
     .post('/v2/enqueue')
-    .reply(200, body)
+    .reply(202, body)
     .post('/v2/enqueue')
-    .reply(200, body)
+    .reply(202, body)
     .post('/v2/enqueue')
-    .reply(200, body);
+    .reply(202, body);
 
   let response = await acknowledge(eventPayloadV2);
 

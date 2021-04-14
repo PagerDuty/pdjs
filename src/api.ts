@@ -95,11 +95,16 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
     (response: Response): APIPromise => {
       const apiResponse = response as APIResponse;
       apiResponse.response = response;
-      const resource = resourceKey(url);
+
+      if (response.status === 204) {
+        return Promise.resolve(apiResponse);
+      }
+
       return response
         .json()
         .then(
           (data): APIResponse => {
+            const resource = resourceKey(url);
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
