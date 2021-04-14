@@ -96,12 +96,10 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
       const apiResponse = response as APIResponse;
       apiResponse.response = response;
 
-      if (!response.ok) {
-        return Promise.reject(apiResponse);
-      }
       if (response.status === 204) {
         return Promise.resolve(apiResponse);
       }
+
       return response
         .json()
         .then(
@@ -113,9 +111,7 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
             return apiResponse;
           }
         )
-        .catch(() => {
-          return Promise.reject(apiResponse)
-        });
+        .catch(() => Promise.reject(apiResponse));
     }
   );
 }
