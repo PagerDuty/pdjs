@@ -25,7 +25,8 @@ function api(apiParameters) {
     };
     // Allow `data` for `queryParameters` for requests without bodies.
     if (isReadonlyRequest(config.method) && data) {
-        config.queryParameters = (_a = config.queryParameters) !== null && _a !== void 0 ? _a : data;
+        config.queryParameters =
+            (_a = config.queryParameters) !== null && _a !== void 0 ? _a : data;
     }
     else {
         config.body = JSON.stringify(data);
@@ -37,10 +38,13 @@ function apiRequest(url, options) {
     return common_1.request(url, options).then((response) => {
         const apiResponse = response;
         apiResponse.response = response;
-        const resource = resourceKey(url);
+        if (response.status === 204) {
+            return Promise.resolve(apiResponse);
+        }
         return response
             .json()
             .then((data) => {
+            const resource = resourceKey(url);
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
