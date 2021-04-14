@@ -70,6 +70,26 @@ test('API calls return JSON for basic API calls with endpoint', async done => {
   done();
 });
 
+test('API calls return successfully on DELETE endpoints', async done => {
+  nock('https://api.pagerduty.com', {
+    reqheaders: {
+      Authorization: 'Token token=someToken1234567890',
+      'User-Agent': header => header.startsWith('pdjs'),
+    },
+  })
+    .delete('/incidents/delete')
+    .reply(204);
+
+  const pd = api({token: 'someToken1234567890'});
+
+  const response = await pd.delete('/incidents/delete');
+
+  expect(response.url).toEqual('https://api.pagerduty.com/incidents/delete');
+  expect(response.data).toEqual(undefined);
+  done();
+});
+
+
 test('API calls support partial application with url', async done => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
