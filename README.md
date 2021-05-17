@@ -22,7 +22,7 @@ REST API calls can be done using the convenience methods or by passing in a `url
 
 #### Convenience Methods
 
-There are some simply convience methods. `get()`, `post()`, `put()`, and `delete()`.
+There are some simple convience methods. `get()`, `post()`, `put()`, and `delete()`.
 
 ```javascript
 import {api} from '@pagerduty/pdjs';
