@@ -15,7 +15,7 @@ const eventPayloadV2 = {
   },
 };
 
-test('Events API properly passes Events V2 requests', async done => {
+test('Events API properly passes Events V2 requests', async () => {
   const body = {
     data: {
       status: 'success',
@@ -36,10 +36,9 @@ test('Events API properly passes Events V2 requests', async done => {
 
   expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
   expect(response.data).toEqual(body);
-  done();
 });
 
-test('Events API properly passes Change Events requests', async done => {
+test('Events API properly passes Change Events requests', async () => {
   const body = {
     data: {
       status: 'success',
@@ -62,10 +61,9 @@ test('Events API properly passes Change Events requests', async done => {
     'https://events.pagerduty.com/v2/change/enqueue'
   );
   expect(response.data).toEqual(body);
-  done();
 });
 
-test('Events API properly passes Events V2 requests with images/links/details', async done => {
+test('Events API properly passes Events V2 requests with images/links/details', async () => {
   const body = {
     data: {
       status: 'success',
@@ -110,10 +108,9 @@ test('Events API properly passes Events V2 requests with images/links/details', 
 
   expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
   expect(response.data).toEqual(body);
-  done();
 });
 
-test('Events API shorthands should send corresponding events', async done => {
+test('Events API shorthands should send corresponding events', async () => {
   const body = {
     data: {
       status: 'success',
@@ -148,5 +145,4 @@ test('Events API shorthands should send corresponding events', async done => {
 
   expect(response.url).toEqual('https://events.pagerduty.com/v2/enqueue');
   expect(response.data).toEqual(body);
-  done();
 });

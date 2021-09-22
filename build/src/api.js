@@ -44,7 +44,7 @@ function apiRequest(url, options) {
         return response
             .json()
             .then((data) => {
-            const resource = resourceKey(url);
+            const resource = resourceKey(url, options.method);
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
@@ -53,10 +53,20 @@ function apiRequest(url, options) {
             .catch(() => Promise.reject(apiResponse));
     });
 }
-function resourceKey(url) {
+function resourceKey(url, method) {
     const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
     if (resource) {
-        return resource[1];
+        let resourceName = resource[1];
+        if (method && method.toLowerCase() === 'get') {
+            return resourceName;
+        }
+        if (resourceName.endsWith('ies')) {
+            return resourceName.slice(0, -3) + 'y';
+        }
+        else if (resourceName.endsWith('s')) {
+            return resourceName.slice(0, -1);
+        }
+        return resourceName;
     }
     return null;
 }

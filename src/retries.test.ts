@@ -1,7 +1,7 @@
 import nock = require('nock');
 import {api} from './index';
 
-test('API request should return after 3 rate limited requests', async done => {
+test('API request should return after 3 rate limited requests', async () => {
   const body = {
     incidents: [],
     limit: 1,
@@ -27,10 +27,9 @@ test('API request should return after 3 rate limited requests', async done => {
   });
 
   expect(response.response.status).toEqual(429);
-  done();
 });
 
-test('API should return data after getting rate limited once.', async done => {
+test('API should return data after getting rate limited once.', async () => {
   const body = {
     incidents: [],
     limit: 1,
@@ -53,5 +52,4 @@ test('API should return data after getting rate limited once.', async done => {
 
   expect(response.response.status).toEqual(200);
   expect(response.data).toEqual(body);
-  done();
 });

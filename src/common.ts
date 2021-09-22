@@ -12,6 +12,7 @@ export interface RequestOptions extends RequestInit {
   queryParameters?: QueryParameter;
   retryCount?: number;
   requestTimeout?: number;
+  requestTimer?: any;
   retryTimeout?: number;
   timeout?: number;
 }
@@ -20,21 +21,20 @@ export function request(
   url: string | URL,
   options: RequestOptions = {}
 ): Promise<Response> {
-  const {queryParameters, requestTimeout = 30000, ...rest} = options;
+  let {queryParameters, requestTimeout = 30000, ...extras} = options;
 
   url = new URL(url.toString());
-
   url = applyParameters(url, queryParameters);
-  options = applyTimeout(options, requestTimeout);
+  extras = applyTimeout(extras, requestTimeout);
 
   return fetch_retry(url.toString(), 3, {
-    ...rest,
+    ...extras,
     headers: new Headers({
       'Content-Type': 'application/json; charset=utf-8',
       /* LEGACY-BROWSER-SUPPORT-START */
       ...userAgentHeader(),
       /* LEGACY-BROWSER-SUPPORT-END */
-      ...rest.headers,
+      ...extras.headers,
     }),
   });
 }
@@ -58,6 +58,7 @@ function fetch_retry(
               .catch(reject);
           });
         } else {
+          clearTimeout(options.requestTimer);
           resolve(response);
         }
       })
@@ -100,12 +101,9 @@ function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
 
 function applyTimeout(init: RequestOptions, timeout?: number): RequestOptions {
   if (!timeout) return init;
-
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), timeout);
-
+  let timer = setTimeout(() => {}, timeout);
   return {
     ...init,
-    signal: controller.signal,
+    requestTimer: timer
   };
 }

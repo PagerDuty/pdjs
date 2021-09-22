@@ -9,7 +9,7 @@ const EMPTY_BODY = {
   more: false,
 };
 
-test('API calls return JSON for basic API calls with server', async done => {
+test('API calls return JSON for basic API calls with server', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -27,10 +27,9 @@ test('API calls return JSON for basic API calls with server', async done => {
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls return JSON for basic API calls with url', async done => {
+test('API calls return JSON for basic API calls with url', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -47,10 +46,9 @@ test('API calls return JSON for basic API calls with url', async done => {
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls return JSON for basic API calls with endpoint', async done => {
+test('API calls return JSON for basic API calls with endpoint', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -67,10 +65,9 @@ test('API calls return JSON for basic API calls with endpoint', async done => {
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls return successfully on DELETE endpoints', async done => {
+test('API calls return successfully on DELETE endpoints', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -86,10 +83,9 @@ test('API calls return successfully on DELETE endpoints', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents/delete');
   expect(response.data).toEqual(undefined);
-  done();
 });
 
-test('API calls support partial application with url', async done => {
+test('API calls support partial application with url', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -106,10 +102,9 @@ test('API calls support partial application with url', async done => {
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls support partial application with convenience methods', async done => {
+test('API calls support partial application with convenience methods', async () => {
   nock('https://api.pagerduty.com', {
     reqheaders: {
       Authorization: 'Token token=someToken1234567890',
@@ -123,10 +118,9 @@ test('API calls support partial application with convenience methods', async don
 
   expect(resp.url).toEqual('https://api.pagerduty.com/incidents');
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls use data in place of queryParameters when provided on GET requests', async done => {
+test('API calls use data in place of queryParameters when provided on GET requests', async () => {
   nock('https://api.pagerduty.com')
     .get('/incidents?sort_by=created_at&total=true')
     .reply(200, EMPTY_BODY);
@@ -141,10 +135,9 @@ test('API calls use data in place of queryParameters when provided on GET reques
     'https://api.pagerduty.com/incidents?sort_by=created_at&total=true'
   );
   expect(resp.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API calls populate resource field', async done => {
+test('API calls populate resource field', async () => {
   nock('https://api.pagerduty.com')
     .get('/incidents')
     .reply(200, {
@@ -154,16 +147,26 @@ test('API calls populate resource field', async done => {
       total: null,
       more: false,
     });
+  nock('https://api.pagerduty.com')
+    .post('/incidents')
+    .reply(201, {
+      incident: ['some incident']
+    });
 
-  const resp = await api({
+  const respGet = await api({
     token: 'someToken1234567890',
     endpoint: '/incidents',
   });
-  expect(resp.resource).toEqual(['one', 1, null]);
-  done();
+  expect(respGet.resource).toEqual(['one', 1, null]);
+  const respPost = await api({
+    token: 'someToken1234567890',
+    endpoint: '/incidents',
+    method: 'POST',
+  });
+  expect(respPost.resource).toEqual(['some incident']);
 });
 
-test('API explodes list based parameters properly', async done => {
+test('API explodes list based parameters properly', async () => {
   nock('https://api.pagerduty.com')
     .get(
       '/incidents?additional_fields[]=one&additional_fields[]=two&additional_fields[]=three'
@@ -187,10 +190,9 @@ test('API explodes list based parameters properly', async done => {
   expect(resp.url).toEqual(
     'https://api.pagerduty.com/incidents?additional_fields%5B%5D=one&additional_fields%5B%5D=two&additional_fields%5B%5D=three'
   );
-  done();
 });
 
-test('API `all` calls for offset should generate requests until no more results', async done => {
+test('API `all` calls for offset should generate requests until no more results', async () => {
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1')
     .reply(200, {
@@ -226,10 +228,9 @@ test('API `all` calls for offset should generate requests until no more results'
   const responses = await pd.all('/incidents', {data: {limit: 1}});
 
   expect(responses.resource).toEqual([{name: 1}, {name: 2}, {name: 3}]);
-  done();
 });
 
-test('API `all` calls for cursor should generate requests until no more results', async done => {
+test('API `all` calls for cursor should generate requests until no more results', async () => {
   nock('https://api.pagerduty.com')
     .get('/incidents?limit=1')
     .reply(200, {
@@ -261,10 +262,9 @@ test('API `all` calls for cursor should generate requests until no more results'
   });
 
   expect(responses.resource).toEqual([{name: 1}, {name: 2}, {name: 3}]);
-  done();
 });
 
-test('API `get` calls with shorthand `get` should succeed', async done => {
+test('API `get` calls with shorthand `get` should succeed', async () => {
   nock('https://api.pagerduty.com').get('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -273,10 +273,9 @@ test('API `get` calls with shorthand `get` should succeed', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents');
   expect(response.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API `post` calls with shorthand `get` should succeed', async done => {
+test('API `post` calls with shorthand `get` should succeed', async () => {
   nock('https://api.pagerduty.com').post('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -285,10 +284,9 @@ test('API `post` calls with shorthand `get` should succeed', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents');
   expect(response.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API `put` calls with shorthand `get` should succeed', async done => {
+test('API `put` calls with shorthand `get` should succeed', async () => {
   nock('https://api.pagerduty.com').put('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -297,10 +295,9 @@ test('API `put` calls with shorthand `get` should succeed', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents');
   expect(response.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API `patch` calls with shorthand `get` should succeed', async done => {
+test('API `patch` calls with shorthand `get` should succeed', async () => {
   nock('https://api.pagerduty.com').patch('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -309,10 +306,9 @@ test('API `patch` calls with shorthand `get` should succeed', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents');
   expect(response.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API `delete` calls with shorthand `get` should succeed', async done => {
+test('API `delete` calls with shorthand `get` should succeed', async () => {
   nock('https://api.pagerduty.com').delete('/incidents').reply(200, EMPTY_BODY);
 
   const pd = api({token: 'someToken1234567890'});
@@ -321,10 +317,9 @@ test('API `delete` calls with shorthand `get` should succeed', async done => {
 
   expect(response.url).toEqual('https://api.pagerduty.com/incidents');
   expect(response.data).toEqual(EMPTY_BODY);
-  done();
 });
 
-test('API catches ETIMEDOUT error', async done => {
+test('API catches ETIMEDOUT error', async () => {
   nock('https://api.pagerduty.com')
     .get('/incidents')
     .replyWithError({code: 'ETIMEDOUT'});
@@ -334,5 +329,4 @@ test('API catches ETIMEDOUT error', async done => {
   await expect(pd.get('/incidents')).rejects.toThrow(
     'request to https://api.pagerduty.com/incidents failed, reason: undefined'
   );
-  done();
 });

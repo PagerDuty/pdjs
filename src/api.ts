@@ -104,7 +104,7 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
         .json()
         .then(
           (data): APIResponse => {
-            const resource = resourceKey(url);
+            const resource = resourceKey(url, options.method);
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
@@ -116,10 +116,19 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
   );
 }
 
-function resourceKey(url: string) {
+function resourceKey(url: string, method?: string) {
   const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
   if (resource) {
-    return resource[1];
+    let resourceName = resource[1];
+    if (method && method.toLowerCase() === 'get') {
+      return resourceName;  
+    }
+    if (resourceName.endsWith('ies')) {
+      return resourceName.slice(0, -3) + 'y'
+    } else if (resourceName.endsWith('s')) {
+      return resourceName.slice(0, -1);
+    }
+    return resourceName; 
   }
   return null;
 }

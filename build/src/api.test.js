@@ -130,11 +130,22 @@ test('API calls populate resource field', async (done) => {
         total: null,
         more: false,
     });
-    const resp = await index_1.api({
+    nock('https://api.pagerduty.com')
+        .post('/incidents')
+        .reply(201, {
+        incident: ['some incident']
+    });
+    const respGet = await index_1.api({
         token: 'someToken1234567890',
         endpoint: '/incidents',
     });
-    expect(resp.resource).toEqual(['one', 1, null]);
+    expect(respGet.resource).toEqual(['one', 1, null]);
+    const respPost = await index_1.api({
+        token: 'someToken1234567890',
+        endpoint: '/incidents',
+        method: 'POST',
+    });
+    expect(respPost.resource).toEqual(['some incident']);
     done();
 });
 test('API explodes list based parameters properly', async (done) => {
