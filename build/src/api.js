@@ -35,7 +35,7 @@ function api(apiParameters) {
 }
 exports.api = api;
 function apiRequest(url, options) {
-    return common_1.request(url, options).then((response) => {
+    return (0, common_1.request)(url, options).then((response) => {
         const apiResponse = response;
         apiResponse.response = response;
         if (response.status === 204) {

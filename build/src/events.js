@@ -31,7 +31,7 @@ exports.resolve = shorthand('resolve');
 const change = (eventParameters) => event({ ...eventParameters, type: 'change' });
 exports.change = change;
 function eventFetch(url, options) {
-    return common_1.request(url, options).then((response) => {
+    return (0, common_1.request)(url, options).then((response) => {
         const apiResponse = response;
         return response.json().then((data) => {
             apiResponse.data = data;

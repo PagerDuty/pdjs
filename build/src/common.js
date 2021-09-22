@@ -25,7 +25,7 @@ function request(url, options = {}) {
 exports.request = request;
 function fetch_retry(url, retries, options) {
     return new Promise((resolve, reject) => {
-        cross_fetch_1.default(url, options)
+        (0, cross_fetch_1.default)(url, options)
             .then(response => {
             // We don't want to `reject` when retries have finished
             // Instead simply stop trying and return.
