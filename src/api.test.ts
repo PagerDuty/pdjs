@@ -150,7 +150,7 @@ test('API calls populate resource field', async () => {
   nock('https://api.pagerduty.com')
     .post('/incidents')
     .reply(201, {
-      incident: ['some incident']
+      incident: ['some incident'],
     });
 
   const respGet = await api({

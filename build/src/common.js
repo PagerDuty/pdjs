@@ -7,18 +7,18 @@ const browser_or_node_1 = require("browser-or-node");
 /* LEGACY-BROWSER-SUPPORT-END */
 const VERSION = '2.0.0';
 function request(url, options = {}) {
-    let { queryParameters, requestTimeout = 30000, ...extras } = options;
+    const { queryParameters, requestTimeout = 30000 } = options;
     url = new URL(url.toString());
     url = applyParameters(url, queryParameters);
-    extras = applyTimeout(extras, requestTimeout);
+    options = applyTimeout(options, requestTimeout);
     return fetch_retry(url.toString(), 3, {
-        ...extras,
+        ...options,
         headers: new cross_fetch_1.Headers({
             'Content-Type': 'application/json; charset=utf-8',
             /* LEGACY-BROWSER-SUPPORT-START */
             ...userAgentHeader(),
             /* LEGACY-BROWSER-SUPPORT-END */
-            ...extras.headers,
+            ...options.headers,
         }),
     });
 }
@@ -79,10 +79,10 @@ function applyParameters(url, queryParameters) {
 function applyTimeout(init, timeout) {
     if (!timeout)
         return init;
-    let timer = setTimeout(() => { }, timeout);
+    const timer = setTimeout(() => { }, timeout);
     return {
         ...init,
-        requestTimer: timer
+        requestTimer: timer,
     };
 }
 //# sourceMappingURL=common.js.map

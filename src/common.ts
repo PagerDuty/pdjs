@@ -1,6 +1,5 @@
 /* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-import {AbortController} from 'abortcontroller-polyfill/dist/cjs-ponyfill';
 import {isBrowser} from 'browser-or-node';
 /* LEGACY-BROWSER-SUPPORT-END */
 
@@ -21,20 +20,20 @@ export function request(
   url: string | URL,
   options: RequestOptions = {}
 ): Promise<Response> {
-  let {queryParameters, requestTimeout = 30000, ...extras} = options;
+  const {queryParameters, requestTimeout = 30000} = options;
 
   url = new URL(url.toString());
   url = applyParameters(url, queryParameters);
-  extras = applyTimeout(extras, requestTimeout);
+  options = applyTimeout(options, requestTimeout);
 
   return fetch_retry(url.toString(), 3, {
-    ...extras,
+    ...options,
     headers: new Headers({
       'Content-Type': 'application/json; charset=utf-8',
       /* LEGACY-BROWSER-SUPPORT-START */
       ...userAgentHeader(),
       /* LEGACY-BROWSER-SUPPORT-END */
-      ...extras.headers,
+      ...options.headers,
     }),
   });
 }
@@ -101,9 +100,9 @@ function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
 
 function applyTimeout(init: RequestOptions, timeout?: number): RequestOptions {
   if (!timeout) return init;
-  let timer = setTimeout(() => {}, timeout);
+  const timer = setTimeout(() => {}, timeout);
   return {
     ...init,
-    requestTimer: timer
+    requestTimer: timer,
   };
 }

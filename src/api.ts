@@ -119,16 +119,16 @@ function apiRequest(url: string, options: RequestOptions): APIPromise {
 function resourceKey(url: string, method?: string) {
   const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
   if (resource) {
-    let resourceName = resource[1];
+    const resourceName = resource[1];
     if (method && method.toLowerCase() === 'get') {
-      return resourceName;  
+      return resourceName;
     }
     if (resourceName.endsWith('ies')) {
-      return resourceName.slice(0, -3) + 'y'
+      return resourceName.slice(0, -3) + 'y';
     } else if (resourceName.endsWith('s')) {
       return resourceName.slice(0, -1);
     }
-    return resourceName; 
+    return resourceName;
   }
   return null;
 }

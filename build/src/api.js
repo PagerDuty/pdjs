@@ -56,7 +56,7 @@ function apiRequest(url, options) {
 function resourceKey(url, method) {
     const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
     if (resource) {
-        let resourceName = resource[1];
+        const resourceName = resource[1];
         if (method && method.toLowerCase() === 'get') {
             return resourceName;
         }
