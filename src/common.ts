@@ -1,6 +1,5 @@
 /* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-import {AbortController} from 'abortcontroller-polyfill/dist/cjs-ponyfill';
 import {isBrowser} from 'browser-or-node';
 /* LEGACY-BROWSER-SUPPORT-END */
 
@@ -12,6 +11,7 @@ export interface RequestOptions extends RequestInit {
   queryParameters?: QueryParameter;
   retryCount?: number;
   requestTimeout?: number;
+  requestTimer?: any;
   retryTimeout?: number;
   timeout?: number;
 }
@@ -20,21 +20,20 @@ export function request(
   url: string | URL,
   options: RequestOptions = {}
 ): Promise<Response> {
-  const {queryParameters, requestTimeout = 30000, ...rest} = options;
+  const {queryParameters, requestTimeout = 30000} = options;
 
   url = new URL(url.toString());
-
   url = applyParameters(url, queryParameters);
   options = applyTimeout(options, requestTimeout);
 
   return fetch_retry(url.toString(), 3, {
-    ...rest,
+    ...options,
     headers: new Headers({
       'Content-Type': 'application/json; charset=utf-8',
       /* LEGACY-BROWSER-SUPPORT-START */
       ...userAgentHeader(),
       /* LEGACY-BROWSER-SUPPORT-END */
-      ...rest.headers,
+      ...options.headers,
     }),
   });
 }
@@ -58,6 +57,7 @@ function fetch_retry(
               .catch(reject);
           });
         } else {
+          clearTimeout(options.requestTimer);
           resolve(response);
         }
       })
@@ -100,12 +100,9 @@ function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
 
 function applyTimeout(init: RequestOptions, timeout?: number): RequestOptions {
   if (!timeout) return init;
-
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), timeout);
-
+  const timer = setTimeout(() => {}, timeout);
   return {
     ...init,
-    signal: controller.signal,
+    requestTimer: timer,
   };
 }

@@ -35,7 +35,7 @@ function api(apiParameters) {
 }
 exports.api = api;
 function apiRequest(url, options) {
-    return common_1.request(url, options).then((response) => {
+    return (0, common_1.request)(url, options).then((response) => {
         const apiResponse = response;
         apiResponse.response = response;
         if (response.status === 204) {
@@ -44,7 +44,7 @@ function apiRequest(url, options) {
         return response
             .json()
             .then((data) => {
-            const resource = resourceKey(url);
+            const resource = resourceKey(url, options.method);
             apiResponse.next = nextFunc(url, options, data);
             apiResponse.data = data;
             apiResponse.resource = resource ? data[resource] : null;
@@ -53,10 +53,20 @@ function apiRequest(url, options) {
             .catch(() => Promise.reject(apiResponse));
     });
 }
-function resourceKey(url) {
+function resourceKey(url, method) {
     const resource = url.match(/.+.com\/(?<resource>[\w]+)/);
     if (resource) {
-        return resource[1];
+        const resourceName = resource[1];
+        if (method && method.toLowerCase() === 'get') {
+            return resourceName;
+        }
+        if (resourceName.endsWith('ies')) {
+            return resourceName.slice(0, -3) + 'y';
+        }
+        else if (resourceName.endsWith('s')) {
+            return resourceName.slice(0, -1);
+        }
+        return resourceName;
     }
     return null;
 }
