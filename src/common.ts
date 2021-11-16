@@ -1,6 +1,6 @@
 /* LEGACY-BROWSER-SUPPORT-START */
 import fetch, {Headers} from 'cross-fetch';
-import {isBrowser} from 'browser-or-node';
+import {isBrowser, isNode, isWebWorker, isJsDom, isDeno} from 'browser-or-node';
 /* LEGACY-BROWSER-SUPPORT-END */
 
 const VERSION = '2.0.0';
@@ -70,11 +70,30 @@ const retryTimeoutPromise = (milliseconds: number) => {
 };
 
 function userAgentHeader(): object {
-  if (isBrowser) return {};
-
-  return {
-    'User-Agent': `pdjs/${VERSION} (${process.version}/${process.platform})`,
-  };
+  if (isNode) {
+    return {
+      'User-Agent': `pdjs/${VERSION} (${process.version}/${process.platform})`,
+    };
+  } else if (isWebWorker) {
+    return {
+      'User-Agent': `pdjs/${VERSION} (WebWorker)`
+    }
+  } else if (isJsDom) {
+    return {
+      'User-Agent': `pdjs/${VERSION} (JsDom)`
+    }
+  } else if (isDeno) {
+    return {
+      'User-Agent': `pdjs/${VERSION} (Deno)`
+    }
+  }else if (isBrowser) {
+    return {
+      // Note: This will not work consistently for all browsers as some silently drop the userAgent Header.
+      'User-Agent': `pdjs/${VERSION} (${window.navigator.userAgent})`
+    }
+  } else {
+    return {};
+  }
 }
 
 function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
