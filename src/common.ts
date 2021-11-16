@@ -76,21 +76,21 @@ function userAgentHeader(): object {
     };
   } else if (isWebWorker) {
     return {
-      'User-Agent': `pdjs/${VERSION} (WebWorker)`
-    }
+      'User-Agent': `pdjs/${VERSION} (WebWorker)`,
+    };
   } else if (isJsDom) {
     return {
-      'User-Agent': `pdjs/${VERSION} (JsDom)`
-    }
+      'User-Agent': `pdjs/${VERSION} (JsDom)`,
+    };
   } else if (isDeno) {
     return {
-      'User-Agent': `pdjs/${VERSION} (Deno)`
-    }
-  }else if (isBrowser) {
+      'User-Agent': `pdjs/${VERSION} (Deno)`,
+    };
+  } else if (isBrowser) {
     return {
       // Note: This will not work consistently for all browsers as some silently drop the userAgent Header.
-      'User-Agent': `pdjs/${VERSION} (${window.navigator.userAgent})`
-    }
+      'User-Agent': `pdjs/${VERSION} (${window.navigator.userAgent})`,
+    };
   } else {
     return {};
   }

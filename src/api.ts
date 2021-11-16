@@ -91,29 +91,25 @@ export function api(
 }
 
 function apiRequest(url: string, options: RequestOptions): APIPromise {
-  return request(url, options).then(
-    (response: Response): APIPromise => {
-      const apiResponse = response as APIResponse;
-      apiResponse.response = response;
+  return request(url, options).then((response: Response): APIPromise => {
+    const apiResponse = response as APIResponse;
+    apiResponse.response = response;
 
-      if (response.status === 204) {
-        return Promise.resolve(apiResponse);
-      }
-
-      return response
-        .json()
-        .then(
-          (data): APIResponse => {
-            const resource = resourceKey(url, options.method);
-            apiResponse.next = nextFunc(url, options, data);
-            apiResponse.data = data;
-            apiResponse.resource = resource ? data[resource] : null;
-            return apiResponse;
-          }
-        )
-        .catch(() => Promise.reject(apiResponse));
+    if (response.status === 204) {
+      return Promise.resolve(apiResponse);
     }
-  );
+
+    return response
+      .json()
+      .then((data): APIResponse => {
+        const resource = resourceKey(url, options.method);
+        apiResponse.next = nextFunc(url, options, data);
+        apiResponse.data = data;
+        apiResponse.resource = resource ? data[resource] : null;
+        return apiResponse;
+      })
+      .catch(() => Promise.reject(apiResponse));
+  });
 }
 
 function resourceKey(url: string, method?: string) {
@@ -209,16 +205,18 @@ function partialCall(apiParameters: Partial<APIParameters>) {
   const partial = ((apiParameters: Partial<APIParameters>) =>
     api({...partialParameters, ...apiParameters})) as PartialCall;
 
-  const shorthand = (method: string) => (
-    endpoint: string,
-    shorthandParameters?: Partial<APIParameters>
-  ): APIPromise =>
-    api({
-      endpoint,
-      method,
-      ...partialParameters,
-      ...shorthandParameters,
-    }) as APIPromise;
+  const shorthand =
+    (method: string) =>
+    (
+      endpoint: string,
+      shorthandParameters?: Partial<APIParameters>
+    ): APIPromise =>
+      api({
+        endpoint,
+        method,
+        ...partialParameters,
+        ...shorthandParameters,
+      }) as APIPromise;
 
   partial.get = shorthand('get');
   partial.post = shorthand('post');
@@ -256,12 +254,14 @@ function partialCall(apiParameters: Partial<APIParameters>) {
     }
 
     const method = 'get';
-    return (api({
-      endpoint,
-      method,
-      ...partialParameters,
-      ...shorthandParameters,
-    }) as APIPromise)
+    return (
+      api({
+        endpoint,
+        method,
+        ...partialParameters,
+        ...shorthandParameters,
+      }) as APIPromise
+    )
       .then(response => allInner([response]))
       .then(responses => repackResponses(responses));
   };
