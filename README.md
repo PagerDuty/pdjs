@@ -93,6 +93,40 @@ pd.all('/incidents')
   .catch(console.error);
 ```
 
+#### Options
+
+The API interface allows for some extra parameters to be included.
+
+##### `server`
+To use this library with a different service region use this parameter to change the root url of requests. Default: `api.pagerduty.com`. 
+
+```javascript
+pd({
+  method: 'post',
+  endpoint: '/incidents',
+  server: 'api.eu.pagerduty.com',
+  data: {
+    ...
+  }
+}).then(...)
+```
+
+##### `headers`
+Some endpoints require the setting of extra `headers` such as a `From` header.
+
+```javascript
+pd({
+  method: 'post',
+  endpoint: '/incidents',
+  headers: {
+    'From': "me@example.com"
+  },
+  data: {
+    ...
+  }
+}).then(...)
+```
+
 ### Retries
 
 There is some very simple retry logic baked into each request in the case that the PagerDuty API rate limits your requests (only when it responds HTTP Code 429). Requests will retry 3 times waiting 20 seconds between each request. If the request is still being rate limited after 3 attempts the client will simply return the 429 response.
