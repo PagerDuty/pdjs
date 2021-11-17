@@ -81,19 +81,19 @@ export function event(eventParameters: EventParameters): EventPromise {
   });
 }
 
-const shorthand =
-  (action: Action) =>
-  (eventParameters: EventParameters): EventPromise => {
-    const typeField = 'event_action';
+const shorthand = (action: Action) => (
+  eventParameters: EventParameters
+): EventPromise => {
+  const typeField = 'event_action';
 
-    return event({
-      ...eventParameters,
-      data: {
-        ...eventParameters.data,
-        [typeField]: action,
-      },
-    });
-  };
+  return event({
+    ...eventParameters,
+    data: {
+      ...eventParameters.data,
+      [typeField]: action,
+    },
+  });
+};
 
 export const trigger = shorthand('trigger');
 export const acknowledge = shorthand('acknowledge');
@@ -102,12 +102,16 @@ export const change = (eventParameters: EventParameters) =>
   event({...eventParameters, type: 'change'});
 
 function eventFetch(url: string, options: RequestOptions): EventPromise {
-  return request(url, options).then((response: Response): EventPromise => {
-    const apiResponse = response as EventResponse;
-    return response.json().then((data): EventResponse => {
-      apiResponse.data = data;
-      apiResponse.response = response;
-      return apiResponse;
-    });
-  });
+  return request(url, options).then(
+    (response: Response): EventPromise => {
+      const apiResponse = response as EventResponse;
+      return response.json().then(
+        (data): EventResponse => {
+          apiResponse.data = data;
+          apiResponse.response = response;
+          return apiResponse;
+        }
+      );
+    }
+  );
 }
