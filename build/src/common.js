@@ -51,11 +51,35 @@ const retryTimeoutPromise = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 };
 function userAgentHeader() {
-    if (browser_or_node_1.isBrowser)
+    if (browser_or_node_1.isNode) {
+        return {
+            'User-Agent': `pdjs/${VERSION} (${process.version}/${process.platform})`,
+        };
+    }
+    else if (browser_or_node_1.isWebWorker) {
+        return {
+            'User-Agent': `pdjs/${VERSION} (WebWorker)`,
+        };
+    }
+    else if (browser_or_node_1.isJsDom) {
+        return {
+            'User-Agent': `pdjs/${VERSION} (JsDom)`,
+        };
+    }
+    else if (browser_or_node_1.isDeno) {
+        return {
+            'User-Agent': `pdjs/${VERSION} (Deno)`,
+        };
+    }
+    else if (browser_or_node_1.isBrowser) {
+        return {
+            // Note: This will not work consistently for all browsers as some silently drop the userAgent Header.
+            'User-Agent': `pdjs/${VERSION} (${window.navigator.userAgent})`,
+        };
+    }
+    else {
         return {};
-    return {
-        'User-Agent': `pdjs/${VERSION} (${process.version}/${process.platform})`,
-    };
+    }
 }
 function applyParameters(url, queryParameters) {
     if (!queryParameters)
