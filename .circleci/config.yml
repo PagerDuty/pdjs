@@ -3,7 +3,7 @@ version: 2.1
 executors:
   base:
     docker:
-      - image: cimg/node:14.18
+      - image: cimg/node:16.13.2
     working_directory: /home/circleci/pdjs
 
 jobs:
