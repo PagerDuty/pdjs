@@ -14,6 +14,19 @@ const eventPayloadV2 = {
         },
     },
 };
+const changeParameters = {
+    data: {
+        routing_key: 'someRoutingKeybfa2a710673888f520',
+        payload: {
+            summary: 'Test change event',
+            source: 'test-source',
+            timestamp: new Date().toISOString(),
+            custom_details: {
+                test_detail: 'test-value',
+            },
+        },
+    },
+};
 test('Events API properly passes Events V2 requests', async () => {
     const body = {
         data: {
@@ -48,7 +61,7 @@ test('Events API properly passes Change Events requests', async () => {
     })
         .post('/v2/change/enqueue')
         .reply(202, body);
-    const response = await (0, index_1.change)(eventPayloadV2);
+    const response = await (0, index_1.change)(changeParameters);
     expect(response.url).toEqual('https://events.pagerduty.com/v2/change/enqueue');
     expect(response.data).toEqual(body);
 });

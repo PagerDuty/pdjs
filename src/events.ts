@@ -52,16 +52,20 @@ export interface ChangePayload {
     summary: string;
     source?: string;
     timestamp: string;
-    custom_details: object;
+    custom_details?: object;
   };
-  links: Array<Link>;
+  images?: Array<Image>;
+  links?: Array<Link>;
 }
 export interface ChangeParameters extends RequestOptions {
   data: ChangePayload;
+  type?: string;
   server?: string;
 }
 
-export function event(eventParameters: EventParameters): EventPromise {
+export function event(
+  eventParameters: EventParameters | ChangeParameters
+): EventPromise {
   const {
     server = 'events.pagerduty.com',
     type = 'event',
@@ -98,8 +102,8 @@ const shorthand = (action: Action) => (
 export const trigger = shorthand('trigger');
 export const acknowledge = shorthand('acknowledge');
 export const resolve = shorthand('resolve');
-export const change = (eventParameters: EventParameters) =>
-  event({...eventParameters, type: 'change'});
+export const change = (changeParameters: ChangeParameters) =>
+  event({...changeParameters, type: 'change'});
 
 function eventFetch(url: string, options: RequestOptions): EventPromise {
   return request(url, options).then(

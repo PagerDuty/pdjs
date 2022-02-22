@@ -2,9 +2,9 @@
 
 A simple JavaScript wrapper for the PagerDuty APIs.
 
- - Supports Node and Browser environments
- - Supports REST and Events v2 APIs.
- - Supports both offset and cursor based pagination
+- Supports Node and Browser environments
+- Supports REST and Events v2 APIs.
+- Supports both offset and cursor based pagination
 
 For full [API Reference see this page.](https://developer.pagerduty.com/api-reference)
 
@@ -34,10 +34,21 @@ pd.get('/incidents')
   .catch(console.error);
 
 // Similarly, for `post`, `put`, `patch` and `delete`.
-pd.post('/incidents', { data: { ... } }).then(...)
+pd.post('/incidents', { data: { ... } }).then(...);
+
+// If you need to supply headers:
+pd.post('/incidents/id/status_updates', {
+  headers: {
+    From: 'user@example.com',
+  },
+  data: { ... },
+}).then();
 ```
+
 #### `tokenType`
+
 Allows you to set either `token` or `bearer` tokens. Defaults to `token` but provides ability to use `bearer` as well.
+
 - [Tokens](https://developer.pagerduty.com/docs/rest-api-v2/authentication/) are generated in your PagerDuty account.
 - **Bearer** tokens are generated through an [OAuth 2.0](https://developer.pagerduty.com/docs/app-integration-development/oauth-2-functionality/) authorization flow. For example, to use a Bearer token when initializing `api` you'll pass int the `tokenType` parameter, like so:
 
@@ -98,6 +109,7 @@ pd.all('/incidents')
 The API interface allows for some extra parameters to be included.
 
 ##### `server`
+
 To use this library with a different service region use this parameter to change the root url of requests. Default: `api.pagerduty.com`. 
 
 ```javascript
@@ -112,6 +124,7 @@ pd({
 ```
 
 ##### `headers`
+
 Some endpoints require the setting of extra `headers` such as a `From` header.
 
 ```javascript

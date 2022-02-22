@@ -43,16 +43,18 @@ export interface ChangePayload {
         summary: string;
         source?: string;
         timestamp: string;
-        custom_details: object;
+        custom_details?: object;
     };
-    links: Array<Link>;
+    images?: Array<Image>;
+    links?: Array<Link>;
 }
 export interface ChangeParameters extends RequestOptions {
     data: ChangePayload;
+    type?: string;
     server?: string;
 }
-export declare function event(eventParameters: EventParameters): EventPromise;
+export declare function event(eventParameters: EventParameters | ChangeParameters): EventPromise;
 export declare const trigger: (eventParameters: EventParameters) => EventPromise;
 export declare const acknowledge: (eventParameters: EventParameters) => EventPromise;
 export declare const resolve: (eventParameters: EventParameters) => EventPromise;
-export declare const change: (eventParameters: EventParameters) => EventPromise;
+export declare const change: (changeParameters: ChangeParameters) => EventPromise;

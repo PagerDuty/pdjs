@@ -1,5 +1,5 @@
 import nock = require('nock');
-import {Action, Severity} from './events';
+import {Action, ChangeParameters, Severity} from './events';
 import {event, change, trigger, resolve, acknowledge} from './index';
 
 const eventPayloadV2 = {
@@ -11,6 +11,20 @@ const eventPayloadV2 = {
       summary: 'Test Event V2',
       source: 'test-source',
       severity: <Severity>'error',
+    },
+  },
+};
+
+const changeParameters: ChangeParameters = {
+  data: {
+    routing_key: 'someRoutingKeybfa2a710673888f520',
+    payload: {
+      summary: 'Test change event',
+      source: 'test-source',
+      timestamp: new Date().toISOString(),
+      custom_details: {
+        test_detail: 'test-value',
+      },
     },
   },
 };
@@ -55,7 +69,7 @@ test('Events API properly passes Change Events requests', async () => {
     .post('/v2/change/enqueue')
     .reply(202, body);
 
-  const response = await change(eventPayloadV2);
+  const response = await change(changeParameters);
 
   expect(response.url).toEqual(
     'https://events.pagerduty.com/v2/change/enqueue'
