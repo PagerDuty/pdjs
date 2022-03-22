@@ -106,7 +106,7 @@ function applyParameters(url: URL, queryParameters?: QueryParameter): URL {
     if (Array.isArray(parameter)) {
       // Support for array based keys like `additional_fields[]`
       parameter.forEach(item => {
-        combinedParameters.append(key, item);
+        combinedParameters.append(`${key}[]`, item);
       });
     } else {
       combinedParameters.append(key, parameter);
