@@ -87,10 +87,9 @@ function userAgentHeader(): object {
       'User-Agent': `pdjs/${VERSION} (Deno)`,
     };
   } else if (isBrowser) {
-    return {
-      // Note: This will not work consistently for all browsers as some silently drop the userAgent Header.
-      'User-Agent': `pdjs/${VERSION} (${window.navigator.userAgent})`,
-    };
+    // Note: The PagerDuty API returns a CORS header only allowing the following headers:
+    //       Authorization, Content-Type, From, X-EARLY-ACCESS, X-PagerDuty-Api-Local
+    return {};
   } else {
     return {};
   }
