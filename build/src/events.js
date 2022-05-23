@@ -28,7 +28,7 @@ const shorthand = (action) => (eventParameters) => {
 exports.trigger = shorthand('trigger');
 exports.acknowledge = shorthand('acknowledge');
 exports.resolve = shorthand('resolve');
-const change = (eventParameters) => event({ ...eventParameters, type: 'change' });
+const change = (changeParameters) => event({ ...changeParameters, type: 'change' });
 exports.change = change;
 function eventFetch(url, options) {
     return (0, common_1.request)(url, options).then((response) => {
