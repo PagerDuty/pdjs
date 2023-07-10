@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "browser-or-node": "^2.0.0",
-    "cross-fetch": "^3.0.6"
+    "cross-fetch": "^4.0.0"
   },
   "engines": {
     "node": ">=10.0.0"
