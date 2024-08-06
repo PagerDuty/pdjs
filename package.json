@@ -2,6 +2,7 @@
   "name": "@pagerduty/pdjs",
   "version": "2.2.4",
   "description": "A new simple JavaScript wrapper for the PagerDuty API",
+  "repository": "PagerDuty/pdjs",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
